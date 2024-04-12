@@ -1,37 +1,53 @@
 #include "rpcWiFi.h"
+#include "TFT_eSPI.h"
 
-// Credential variables need a pointer for WiFi.begin().
+// Initialize TFT_eSPI object to manipulate screen.
+TFT_eSPI tft;
+
+// Initialize credential variables for WiFi.begin().
 const char* ssid = "laptop";
 const char* password =  "PrettyLL";
 
+
 void setup() {
 
-    Serial.begin(115200);
-    while(!Serial); // Wait for Serial before moving on
+  // Set text settings and background.
+  tft.begin();
+  tft.setRotation(3);
+  tft.setTextSize(2);
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW);
+  tft.setTextDatum(MC_DATUM);
 
-    connectToWiFi();
+  connectToWiFi();
 }
 
 void loop() {
 
 }
 
+// Display text on the center of the screen.
+void displayText(char* text) {
+  tft.fillScreen(0x0000);
+  tft.drawString(text, tft.width() / 2, tft.height() / 2);
+}
+
 void connectToWiFi() {
 
   // Disconnect from WiFi if it's currently connected
-  WiFi.disconnect();
-  delay(3000);
+  if(WiFi.status() == WL_CONNECTED) {
+    displayText("Disconnecting from WiFi..");
+    WiFi.disconnect();
+    delay(3000);
+  }
   
-  // Attempts to connect to the WiFi network until it establishes a connection
+  // Attempt to connect to the WiFi network until a connection is established
   while(WiFi.status() != WL_CONNECTED) {
-
-    Serial.println("Establishing connection...");
+    displayText("Connecting to WiFi..");
     WiFi.begin(ssid, password);
     delay(3000);
   }
 
-  // Prints the connection confirmation along with the IP
-  Serial.println("Connection established!");
-  Serial.print("IP Address: ");
-  Serial.println(WiFi.localIP());
+  // Print confirmation
+  displayText("Connected!");
 }
