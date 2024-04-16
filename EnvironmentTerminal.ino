@@ -1,6 +1,6 @@
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
-
+#include <PubSubClient.h>
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
@@ -11,17 +11,33 @@ const char SSID[] = "laptop";
 const char PASSWORD[] =  "PrettyLL";
 
 
+// Initialize and declare necessary variables for local MQTT broker
+WiFiClient wifiClient;
+PubSubClient mqttClient;
+const char MQTT_SERVER[] = "broker.hivemq.com";
+const char MQTT_CLIENT_ID[] = "GameTerminal";
+const int MQTT_PORT = 1883;
+
 
 void setup() {
 
   setTextSettings();
   connectToWiFi();
+  connectToMQTTBroker();
 }
 
 
 
 void loop() {
 
+  // Re-establish connection if any is lost
+  if(!WiFi.isConnected()) {
+    connectToWiFi();
+  }
+
+  if(!mqttClient.loop()) {
+    connectToMQTTBroker();
+  }
 }
 
 
@@ -49,6 +65,46 @@ void connectToWiFi() {
   displayText("Connected!");
 }
 
+
+void connectToMQTTBroker() {
+
+  // Loop until mqtt connection is established
+  while(!mqttClient.connected()) {
+
+    // Ensure that WiFi is connected before proceeding
+    if(!WiFi.isConnected()) {
+      connectToWiFi();
+    }
+
+    displayText("Connecting to MQTT..");
+
+    // Configure pubsub client with property setters
+    mqttClient.setClient(wifiClient);
+    mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+    mqttClient.connect(MQTT_CLIENT_ID);
+    mqttClient.setCallback(callback);
+    
+    // 3 second cooldown before next connection attempt
+    if(!mqttClient.connected()) {
+      delay(3000);
+    }
+  }
+
+  displayText("MQTT connected!");
+  delay(1000);
+}
+
+// Handle mqtt subscription message.
+void callback(char* topic, byte* payload, unsigned int length) {
+
+  char message[length];
+
+  for(int i = 0; i < length; i++) {
+    message[i] = payload[i];
+  }
+
+  displayText(message);
+}
 
 
 // Set text settings and background.

@@ -3,3 +3,6 @@
 
 ## INTELLIJ
 /.idea
+
+## Mac
+.DS_Store
