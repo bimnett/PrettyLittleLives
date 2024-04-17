@@ -36,6 +36,9 @@ void setup() {
   pinMode(WIO_5S_RIGHT, INPUT_PULLUP);
   pinMode(WIO_5S_PRESS, INPUT_PULLUP);
 
+  // Initialize sound replay button on top of terminal
+  pinMode(WIO_KEY_C, INPUT_PULLUP);
+
   // Initializes the tft object and the initial background
   setTextSettings();
   connectToWiFi();
@@ -53,6 +56,7 @@ void loop() {
     connectToMQTTBroker();
   }
 
+  replaySound();
   handleJoystickInput();
 }
 
@@ -151,7 +155,17 @@ void setTextSettings() {
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
+}
+
+
+// Sends a message to the mqtt broker to replay the sound from the web app.
+void replaySound() {
+
+  if(digitalRead(WIO_KEY_C) == LOW) {
+    mqttClient.publish("pll/game-terminal/sound-game/replay-sound", "replay");
+    delay(300); // Delay to ensure a button click only sends one message.
   }
+}
 
 
 // Handles the joystick input by calling their respective method when it's being used.
