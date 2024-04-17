@@ -2,27 +2,21 @@
 #include "rpcWiFi.h"
 #include <PubSubClient.h>
 #include <cstring>
+#include "includes/connectionCredentials.h"
 
 // Declare tft object for manipulating the wio terminal screen.
 TFT_eSPI tft;
 
-// Initialize credential variables for WiFi.begin().
-const char SSID[] = "laptop";
-const char PASSWORD[] =  "PrettyLL";
 
-
-// Initialize and declare necessary variables for local MQTT broker
+// Declare necessary variables for MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
-const char MQTT_SERVER[] = "broker.hivemq.com";
-const char MQTT_CLIENT_ID[] = "GameTerminal";
-const int MQTT_PORT = 1883;
 
 
-// Options for the end-user to select. Will be initialized from a subscription message from the web client.
-String options[] = {"Option 1", "Option 2", "Option 3", "Option 4"};
+// Options for the end-user to select from. Will be initialized from a subscription message from the web client.
+String options[4];
 
-// Default value for option
+// Keeps track of current value for the selected option
 String selectedOption;
 
 void setup() {
@@ -36,11 +30,13 @@ void setup() {
   pinMode(WIO_5S_RIGHT, INPUT_PULLUP);
   pinMode(WIO_5S_PRESS, INPUT_PULLUP);
 
-  // Initialize sound replay button on top of terminal
+  // Initializes button on the terminal
   pinMode(WIO_KEY_C, INPUT_PULLUP);
 
   // Initializes the tft object and the initial background
   setTextSettings();
+
+  // Connect to WiFi and MQTT broker.
   connectToWiFi();
   connectToMQTTBroker();
   mqttClient.subscribe("pll/game-terminal/sound-game/options");
@@ -75,7 +71,7 @@ void connectToWiFi() {
   while(!WiFi.isConnected()) {
 
     displayText("Connecting to WiFi..");
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID, WIFI_PASSWORD);
     delay(3000);
   }
 
@@ -126,10 +122,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
 
-  // 
+  // Split subscription message for parsing.
   char* subOptions = strtok(message, ",");
   int i = 0;
 
+  // Set the value of each option from newly created subOptions
   while(subOptions != NULL) {
     options[i] = subOptions;
     subOptions = strtok (NULL, ",");
@@ -185,7 +182,7 @@ void handleJoystickInput() {
   }
   else if (digitalRead(WIO_5S_PRESS) == LOW) {
     submitAnswer();
-    delay(350); // delay to ensure a button click only sends one answer.
+    delay(350); // Delay to ensure a button click only sends one answer.
   }
 }
 
@@ -273,7 +270,7 @@ void submitAnswer() {
 // Each if/else if statement re-draws the options page based on which option is selected.
 void displayCurrentOption(String option) {
 
-  //
+  
   if(option == options[0]) {
 
     // Displays rectangles, with the selected one being highlighted in cyan
