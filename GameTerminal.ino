@@ -1,12 +1,29 @@
 #include "TFT_eSPI.h"
+#include "rpcWiFi.h"
+#include <PubSubClient.h>
+#include <cstring>
 
+// Declare tft object for manipulating the wio terminal screen.
 TFT_eSPI tft;
 
-// These options will be changed based on the message from the web client
+// Initialize credential variables for WiFi.begin().
+const char SSID[] = "laptop";
+const char PASSWORD[] =  "PrettyLL";
+
+
+// Initialize and declare necessary variables for local MQTT broker
+WiFiClient wifiClient;
+PubSubClient mqttClient;
+const char MQTT_SERVER[] = "broker.hivemq.com";
+const char MQTT_CLIENT_ID[] = "GameTerminal";
+const int MQTT_PORT = 1883;
+
+
+// Options for the end-user to select. Will be initialized from a subscription message from the web client.
 String options[] = {"Option 1", "Option 2", "Option 3", "Option 4"};
 
-// Default value for a 
-String selectedOption = options[0];
+// Default value for option
+String selectedOption;
 
 void setup() {
 
@@ -20,16 +37,122 @@ void setup() {
   pinMode(WIO_5S_PRESS, INPUT_PULLUP);
 
   // Initializes the tft object and the initial background
-  tft.begin();
-  tft.setRotation(3);
-  tft.fillScreen(TFT_BLACK);
-
-  startSoundGame();
+  setTextSettings();
+  connectToWiFi();
+  connectToMQTTBroker();
+  mqttClient.subscribe("pll/game-terminal/sound-game/options");
 }
 
 void loop() {
+
+  // Re-establish connection if any is lost
+  if(!WiFi.isConnected()) {
+    connectToWiFi();
+  }
+  if(!mqttClient.loop()) {
+    connectToMQTTBroker();
+  }
+
   handleJoystickInput();
 }
+
+
+// Display text on the center of the screen.
+void displayText(char* text) {
+
+  tft.fillScreen(0x0000);
+  tft.drawString(text, tft.width() / 2, tft.height() / 2);
+}
+
+
+void connectToWiFi() {
+
+  // Attempt to connect to the WiFi network until a connection is established
+  while(!WiFi.isConnected()) {
+
+    displayText("Connecting to WiFi..");
+    WiFi.begin(SSID, PASSWORD);
+    delay(3000);
+  }
+
+  // Print confirmation
+  displayText("Connected!");
+}
+
+
+void connectToMQTTBroker() {
+
+  // Configure pubsub client with property setters
+  while(!mqttClient.connected()) {
+
+    // Ensure that WiFi is connected before proceeding
+    if(!WiFi.isConnected()) {
+      connectToWiFi();
+    }
+
+    displayText("Connecting to MQTT..");
+
+    mqttClient.setClient(wifiClient);
+    mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+
+    // If mqtt connection is successful, break from loop.
+    if(mqttClient.connect(MQTT_CLIENT_ID)) {
+      break;
+    }
+    
+    if(!mqttClient.connected()) {
+      delay(3000);
+    }
+  }
+
+  mqttClient.setCallback(callback);
+  displayText("MQTT connected!");
+  delay(1000);
+}
+
+// Retrieves mqtt subscription message.
+// Is automatically called when a message is received.
+void callback(char* topic, byte* payload, unsigned int length) {
+
+  char message[length];
+
+  // Convert byte payload of the message to a character array.
+  for(int i = 0; i < length; i++) {
+    message[i] = payload[i];
+  }
+
+
+  // 
+  char* subOptions = strtok(message, ",");
+  int i = 0;
+
+  while(subOptions != NULL) {
+    options[i] = subOptions;
+    subOptions = strtok (NULL, ",");
+    i++;
+  }
+
+
+  // Set 1st option as default value.
+  selectedOption = options[0];
+
+  // Start the game
+  startSoundGame();
+}
+
+
+
+// Set text settings and background.
+void setTextSettings() {
+  
+  tft.begin();
+  tft.setRotation(3);
+  tft.setTextSize(2);
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW);
+  tft.setTextDatum(MC_DATUM);
+  }
+
 
 // Handles the joystick input by calling their respective method when it's being used.
 void handleJoystickInput() {
@@ -48,6 +171,7 @@ void handleJoystickInput() {
   }
   else if (digitalRead(WIO_5S_PRESS) == LOW) {
     submitAnswer();
+    delay(350); // delay to ensure a button click only sends one answer.
   }
 }
 
@@ -124,17 +248,18 @@ void moveRight() {
   displayCurrentOption(selectedOption);
 }
 
-// Will send the selected answer to the mqtt broker
+// Sends the selected answer to the broker
 void submitAnswer() {
 
+  mqttClient.publish("pll/game-terminal/sound-game/answer", selectedOption.c_str());
 }
 
 
 // Hard coded method for moving around the options visually.
-// Each if/else if statement re-draws the options page.
+// Each if/else if statement re-draws the options page based on which option is selected.
 void displayCurrentOption(String option) {
 
-
+  //
   if(option == options[0]) {
 
     // Displays rectangles, with the selected one being highlighted in cyan
@@ -194,7 +319,7 @@ void displayCurrentOption(String option) {
   }
 }
 
-
+// Overloaded text method to choose size and color.
 void setTextSettings(uint16_t color, int textSize) {
   tft.setTextSize(textSize);
   tft.setTextColor(color);
