@@ -1,15 +1,10 @@
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
+#include "includes/connectionCredentials.h"
 
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
-
-
-// Initialize credential variables for WiFi.begin().
-const char SSID[] = "laptop";
-const char PASSWORD[] =  "PrettyLL";
-
 
 
 void setup() {
@@ -41,7 +36,7 @@ void connectToWiFi() {
   while(!WiFi.isConnected()) {
 
     displayText("Connecting to WiFi..");
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID, WIFI_PASSWORD);
     delay(3000);
   }
 

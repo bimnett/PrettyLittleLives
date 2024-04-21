@@ -1,5 +1,11 @@
-## VSCODE
+## VS Code
 /.vscode
 
-## INTELLIJ
+## IntelliJ
 /.idea
+
+## Mac
+.DS_Store
+
+## Sensitive information
+/includes
