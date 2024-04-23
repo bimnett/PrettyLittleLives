@@ -1,22 +1,14 @@
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
+#include "includes/connectionCredentials.h"
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
 
-
-// Initialize credential variables for WiFi.begin().
-const char SSID[] = "laptop";
-const char PASSWORD[] =  "PrettyLL";
-
-
 // Initialize and declare necessary variables for local MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
-const char MQTT_SERVER[] = "broker.hivemq.com";
-const char MQTT_CLIENT_ID[] = "GameTerminal";
-const int MQTT_PORT = 1883;
 
 
 void setup() {
@@ -57,7 +49,7 @@ void connectToWiFi() {
   while(!WiFi.isConnected()) {
 
     displayText("Connecting to WiFi..");
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID, WIFI_PASSWORD);
     delay(3000);
   }
 
