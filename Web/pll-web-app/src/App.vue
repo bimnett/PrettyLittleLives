@@ -7,7 +7,6 @@
   // Import the MQTT library and credentials for cluster
   import mqtt from "mqtt";
   import { HOST } from "./credentials";
-  import { OPTIONS } from "./credentials";
 
   export default {
     name: "App",
@@ -22,7 +21,7 @@
     mounted() {
 
       // Connect to MQTT broker
-      const client = mqtt.connect(HOST, OPTIONS);
+      const client = mqtt.connect(HOST);
 
       // Subscribe to the MQTT topic
       client.on("connect", () => {
