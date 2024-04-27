@@ -28,6 +28,12 @@
         client.subscribe("pll/#");
       });
 
+      // When connection failed
+      client.value.on('error', (error) => {
+        console.error('Connection failed:', error);
+        client.value.end();
+      });
+
       // Receive messages
       client.on("message", (topic, message) => {
         // Update the latest message
