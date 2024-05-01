@@ -29,9 +29,9 @@
       });
 
       // When connection failed
-      client.value.on('error', (error) => {
+      client.on('error', (error) => {
         console.error('Connection failed:', error);
-        client.value.end();
+        client.end();
       });
 
       // Receive messages
