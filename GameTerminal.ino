@@ -39,7 +39,10 @@ void setup() {
   // Connect to WiFi and MQTT broker.
   connectToWiFi();
   connectToMQTTBroker();
+
+  // Subscribe to sound game topics
   mqttClient.subscribe("pll/game-terminal/sound-game/options");
+  mqttClient.subscribe("pll/game-terminal/sound-game/check-answer");
 }
 
 void loop() {
@@ -121,26 +124,67 @@ void callback(char* topic, byte* payload, unsigned int length) {
     message[i] = payload[i];
   }
 
-
-  // Split subscription message for parsing.
-  char* subOptions = strtok(message, ",");
-  int i = 0;
-
-  // Set the value of each option from newly created subOptions
-  while(subOptions != NULL) {
-    options[i] = subOptions;
-    subOptions = strtok (NULL, ",");
-    i++;
-  }
-
-
-  // Set 1st option as default value.
-  selectedOption = options[0];
-
-  // Start the game
-  startSoundGame();
+  handleSubMessage(message, topic);
 }
 
+
+void handleSubMessage(char message[], const char* topic) {
+
+  // Start new instance of the sound game
+  if(strcmp(topic, "pll/game-terminal/sound-game/options") == 0) {
+
+    // Split subscription message for parsing.
+    char* subOptions = strtok(message, ",");
+    int i = 0;
+
+    // Set the value of each option from newly created subOptions
+    while(subOptions != NULL) {
+      options[i] = subOptions;
+      subOptions = strtok (NULL, ",");
+      i++;
+    }
+
+    // Set 1st option as default value.
+    selectedOption = options[0];
+
+    // Start the game
+    startSoundGame();
+  }
+
+  // Display result of the user's answer for the sound game
+  else if(strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
+
+    if(strcmp(selectedOption.c_str(), message) == 0) {
+
+      displayCorrect();
+    } 
+    
+    else {
+
+      displayIncorrect();
+    }
+  }
+}
+
+
+// Displays correct answer animation
+void displayCorrect() {
+
+  // Display green 'Correct!' text at the top
+  tft.fillRect(0, 0, tft.width(), 50, TFT_BLACK);
+  setTextSettings(TFT_GREEN, 3);
+  tft.drawString("Correct!", tft.width() / 2, 25);
+}
+
+
+// Displays incorrect answer animation
+void displayIncorrect() {
+
+  // Display red 'Try again..' text at the top
+  tft.fillRect(0, 0, tft.width(), 50, TFT_BLACK);
+  setTextSettings(TFT_RED, 3);
+  tft.drawString("Try again..", tft.width() / 2, 25);
+}
 
 
 // Set text settings and background.
