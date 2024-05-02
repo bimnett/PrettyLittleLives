@@ -23,8 +23,9 @@
   export default {
     name: 'SoundGame',
     setup() {
-      const mqttClient = ref(null);
+      const mqttClient = mqtt.connect(HOST);
       const mqttTopicReplay = 'pll/game-terminal/sound-game/replay-sound';
+      const mqttTopicCheckAnswer = 'pll/game-terminal/sound-game/check-answer';
       const mqttTopicAnswer = 'pll/game-terminal/sound-game/answer';
       const mqttTopicOptions = 'pll/game-terminal/sound-game/options';
 
@@ -59,10 +60,10 @@
       const checkAnswer = (animalName) => {
         if (animalName === selectedAnimal.value.name) {
           alert("Correct!");
-          mqttClient.value.publish(mqttTopicAnswer, "correct");
+          mqttClient.publish(mqttTopicCheckAnswer, "correct");
         } else {
           alert("Try again!");
-          mqttClient.value.publish(mqttTopicAnswer, "incorrect");
+          mqttClient.publish(mqttTopicCheckAnswer, "incorrect");
         }
       };
 
@@ -74,22 +75,20 @@
         //   password: 'testing1.A',
         // };
 
-        mqttClient.value = mqtt.connect(HOST);
-
         // message published to mqtt
         const publishAnimalNames = () => {
           const animalNames = arrDisplayedAnimals.map(animal => animal.name).join(',') + ','; // example: 'Monkey,Cow,Pig,Dog,''
-          mqttClient.value.publish(mqttTopicOptions, animalNames);
+          mqttClient.publish(mqttTopicOptions, animalNames);
         };        
         
-        mqttClient.value.on('connect', () => {
+        mqttClient.on('connect', () => {
           console.log('Connected to local MQTT broker');
-          mqttClient.value.subscribe([mqttTopicReplay, mqttTopicAnswer]);
+          mqttClient.subscribe([mqttTopicReplay, mqttTopicAnswer]);
           publishAnimalNames(); // publishes a string of animal names to the broker
         });
 
         // messages subscribed to mqtt
-        mqttClient.value.on('message', (mqttTopic, message) => {
+        mqttClient.on('message', (mqttTopic, message) => {
           console.log(`Received message on ${mqttTopic}: ${message.toString()}`);
           if (mqttTopic === mqttTopicReplay && message.toString() === 'replay') {
             playSound();
@@ -100,9 +99,9 @@
           }
         });
 
-        mqttClient.value.on('error', (error) => {
+        mqttClient.on('error', (error) => {
           console.error('Connection failed:', error);
-          mqttClient.value.end();
+          mqttClient.end();
         });
       
     };
@@ -194,4 +193,3 @@
   }
 
 </style>
-  
