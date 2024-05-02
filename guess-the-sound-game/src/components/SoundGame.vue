@@ -67,7 +67,7 @@
       };
 
       const initialiseMQTT = () => {
-
+        
         // message published to mqtt
         const publishAnimalNames = () => {
           const animalNames = arrDisplayedAnimals.map(animal => animal.name).join(',') + ','; // example: 'Monkey,Cow,Pig,Dog,''
