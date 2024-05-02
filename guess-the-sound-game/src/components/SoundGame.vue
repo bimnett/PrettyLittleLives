@@ -55,7 +55,6 @@
       const playSound = () => {
         audioPlayer.value.play();
       };
-
       
       const checkAnswer = (animalName) => {
         if (animalName === selectedAnimal.value.name) {
@@ -68,12 +67,6 @@
       };
 
       const initialiseMQTT = () => {
-
-        // const options = {
-        //   connectTimeout: 4000, // milliseconds
-        //   username: 'test1',
-        //   password: 'testing1.A',
-        // };
 
         // message published to mqtt
         const publishAnimalNames = () => {
