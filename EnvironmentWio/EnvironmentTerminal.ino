@@ -2,6 +2,10 @@
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
 #include "includes/connectionCredentials.h"
+#include "MaryLamb.h"
+
+// Macro define
+#define BUZZER_PIN WIO_BUZZER 
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
@@ -10,12 +14,18 @@ TFT_eSPI tft;
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 
+// Instance of MaryLamb
+MaryLamb mary(BUZZER_PIN);
+
 
 void setup() {
 
   setTextSettings();
   connectToWiFi();
   connectToMQTTBroker();
+
+  // Buzzer pin as output
+  pinMode(BUZZER_PIN, OUTPUT); 
 }
 
 
@@ -29,6 +39,14 @@ void loop() {
 
   if(!mqttClient.loop()) {
     connectToMQTTBroker();
+  }
+
+  // TODO: Replace with actual loudness data value in db
+  int loudnessValue = 55;
+
+  // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db
+  if(loudnessValue >= 50 && loudnessValue <= 60) {
+      mary.playSong();
   }
 }
 
