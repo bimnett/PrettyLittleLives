@@ -31,3 +31,10 @@ coverage
 ## Sensitive information
 /includes
 credentials.js
+credentials.ino 
+
+settings.json
+c_cpp_properties.json
+package-lock.json
+package.json
+jsconfig.json

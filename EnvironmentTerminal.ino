@@ -1,7 +1,8 @@
+// #include <Arduino.h> 
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
-#include "includes/connectionCredentials.h"
+#include "connectionCredentials.h"
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
@@ -9,19 +10,22 @@ TFT_eSPI tft;
 // Initialize and declare necessary variables for local MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
+const char *MQTT_CLIENT_ID = "enviromentTerminal";
 
 
-void setup() {
+const int sampleWindow = 50; // Time frame where millis function will run. 
+unsigned int soundSample; // sound samples collected within the sampleWindow
 
+void setup()
+{
+  Serial.begin(9600);
   setTextSettings();
   connectToWiFi();
   connectToMQTTBroker();
 }
 
-
-
-void loop() {
-
+void loop()
+{
   // Re-establish connection if any is lost
   if(!WiFi.isConnected()) {
     connectToWiFi();
@@ -30,18 +34,43 @@ void loop() {
   if(!mqttClient.loop()) {
     connectToMQTTBroker();
   }
+
+  unsigned long startMillis = millis();   
+  float peakToPeak = 0; 
+  unsigned int signalMax = 0; 
+  unsigned int signalMin = 1023; 
+
+  while (millis() - startMillis < sampleWindow){ 
+    soundSample = analogRead(0);
+    if(soundSample < 1023){
+      if(soundSample > signalMax){
+        signalMax = soundSample; 
+      }
+      else if (soundSample < signalMin){
+        signalMin = soundSample; 
+      }
+    }
+  }
+  
+  peakToPeak = signalMax - signalMin; 
+  // Mapping from anlog to decibel
+  float db = map (peakToPeak, 20, 900, 49.5, 90); 
+
+  // convert to char* to then send it to the mqtt broker
+  char db_char[5];
+  dtostrf(db,5, 1, db_char); 
+
+  mqttClient.publish("pll/sensor/soundLevel", db_char);
+  Serial.println(db);
+  delay(1000);
 }
 
 
-
-// Display text on the center of the screen.
 void displayText(char* text) {
 
   tft.fillScreen(0x0000);
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
-
-
 
 void connectToWiFi() {
 
@@ -56,7 +85,6 @@ void connectToWiFi() {
   // Print confirmation
   displayText("Connected!");
 }
-
 
 void connectToMQTTBroker() {
 
@@ -73,7 +101,7 @@ void connectToMQTTBroker() {
     // Configure pubsub client with property setters
     mqttClient.setClient(wifiClient);
     mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-    mqttClient.connect(MQTT_CLIENT_ID);
+    mqttClient.connect(MQTT_CLIENT_ID); //
     mqttClient.setCallback(callback);
     
     // 3 second cooldown before next connection attempt
@@ -98,7 +126,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   displayText(message);
 }
 
-
 // Set text settings and background.
 void setTextSettings() {
   
@@ -108,4 +135,6 @@ void setTextSettings() {
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
-  }
+}
+
+
