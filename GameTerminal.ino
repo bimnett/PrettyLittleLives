@@ -2,7 +2,7 @@
 #include "rpcWiFi.h"
 #include <PubSubClient.h>
 #include <cstring>
-#include "includes/connectionCredentials.h"
+#include "connectionCredentials.h"
 
 // Declare tft object for manipulating the wio terminal screen.
 TFT_eSPI tft;
@@ -12,12 +12,6 @@ TFT_eSPI tft;
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 
-
-// Options for the end-user to select from. Will be initialized from a subscription message from the web client.
-String options[4];
-
-// Keeps track of current value for the selected option
-String selectedOption;
 
 void setup() {
 
@@ -55,6 +49,7 @@ void loop() {
     connectToMQTTBroker();
   }
 
+  // Track user input for the sound game
   replaySound();
   handleJoystickInput();
 }
@@ -113,6 +108,7 @@ void connectToMQTTBroker() {
   delay(1000);
 }
 
+
 // Retrieves mqtt subscription message.
 // Is automatically called when a message is received.
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -128,12 +124,80 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 
+
+// Handler that triggers different actions depending on topic and subscription message. 
 void handleSubMessage(char message[], const char* topic) {
 
   // Start new instance of the sound game
   if(strcmp(topic, "pll/game-terminal/sound-game/options") == 0) {
 
-    // Split subscription message for parsing.
+    // Set the different option values
+    parseSoundGameOptions(message);
+
+    // Start the game
+    startSoundGame();
+  }
+
+
+  // Display result of the user's answer for the sound game
+  else if(strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
+
+    if(strcmp("correct", message) == 0) {
+
+      displayCorrect();
+    } 
+    
+    else {
+
+      displayIncorrect();
+    }
+  }
+}
+
+
+// Set text settings and background.
+void setTextSettings() {
+  
+  tft.begin();
+  tft.setRotation(3);
+  tft.setTextSize(2);
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW);
+  tft.setTextDatum(MC_DATUM);
+}
+
+
+// Overloaded text method to choose size and color.
+void setTextSettings(uint16_t color, int textSize) {
+  tft.setTextSize(textSize);
+  tft.setTextColor(color);
+  tft.setTextDatum(MC_DATUM);
+}
+
+
+
+/**********************************************************************************************************************************/
+
+
+                                  /**************************************************
+                                   *                                                *
+                                   *                   Sound Game                   *
+                                   *                                                *
+                                   *                      ↓ ↓ ↓                     *
+                                   **************************************************/
+
+
+// Options for the end-user to select from. Will be initialized from a subscription message from the web client.
+String options[4];
+
+// Keeps track of current value for the selected option
+String selectedOption;
+
+
+// Parse options message and set the option values
+void parseSoundGameOptions(char message[]) {
+
+  // Split subscription message for parsing.
     char* subOptions = strtok(message, ",");
     int i = 0;
 
@@ -146,24 +210,6 @@ void handleSubMessage(char message[], const char* topic) {
 
     // Set 1st option as default value.
     selectedOption = options[0];
-
-    // Start the game
-    startSoundGame();
-  }
-
-  // Display result of the user's answer for the sound game
-  else if(strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
-
-    if(strcmp(selectedOption.c_str(), message) == 0) {
-
-      displayCorrect();
-    } 
-    
-    else {
-
-      displayIncorrect();
-    }
-  }
 }
 
 
@@ -184,18 +230,6 @@ void displayIncorrect() {
   tft.fillRect(0, 0, tft.width(), 50, TFT_BLACK);
   setTextSettings(TFT_RED, 3);
   tft.drawString("Try again..", tft.width() / 2, 25);
-}
-
-
-// Set text settings and background.
-void setTextSettings() {
-  
-  tft.begin();
-  tft.setRotation(3);
-  tft.setTextSize(2);
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_YELLOW);
-  tft.setTextDatum(MC_DATUM);
 }
 
 
@@ -249,6 +283,7 @@ void moveUp() {
   displayCurrentOption(selectedOption);
 }
 
+
 // Moves to the downwards option, if it's possible.
 void moveDown() {
   
@@ -266,6 +301,7 @@ void moveDown() {
   
   displayCurrentOption(selectedOption);
 }
+
 
 // Moves to the left option, if it's possible.
 void moveLeft() {
@@ -285,6 +321,7 @@ void moveLeft() {
   displayCurrentOption(selectedOption);
 }
 
+
 // Moves to the right option, if it's possible.
 void moveRight() {
   
@@ -302,6 +339,7 @@ void moveRight() {
   
   displayCurrentOption(selectedOption);
 }
+
 
 // Sends the selected answer to the broker
 void submitAnswer() {
@@ -330,6 +368,7 @@ void displayCurrentOption(String option) {
     tft.drawString(options[3], tft.width() / 4 * 3, (tft.height() + 50) / 3 * 2);
   }
 
+
   else if(option == options[1]) {
 
     // Displays rectangles, with the selected one being highlighted in cyan
@@ -344,6 +383,8 @@ void displayCurrentOption(String option) {
     tft.drawString(options[2], tft.width() / 4, (tft.height() + 50) / 3 * 2);
     tft.drawString(options[3], tft.width() / 4 * 3, (tft.height() + 50) / 3 * 2);
   }
+
+
   else if(option == options[2]) {
 
     // Displays rectangles, with the selected one being highlighted in cyan
@@ -358,6 +399,8 @@ void displayCurrentOption(String option) {
     tft.drawString(options[2], tft.width() / 4, (tft.height() + 50) / 3 * 2);
     tft.drawString(options[3], tft.width() / 4 * 3, (tft.height() + 50) / 3 * 2);
   }
+
+
   else {
 
     // Displays rectangles, with the selected one being highlighted in cyan
@@ -374,12 +417,6 @@ void displayCurrentOption(String option) {
   }
 }
 
-// Overloaded text method to choose size and color.
-void setTextSettings(uint16_t color, int textSize) {
-  tft.setTextSize(textSize);
-  tft.setTextColor(color);
-  tft.setTextDatum(MC_DATUM);
-}
 
 // Displays the sound game.
 void startSoundGame() {
@@ -389,19 +426,21 @@ void startSoundGame() {
   tft.drawLine(tft.width() / 2, 50, tft.width() / 2, tft.height(), TFT_BLACK);  
   tft.drawLine(0, (tft.height() + 50) / 2, tft.width(), (tft.height() + 50) / 2, TFT_BLACK);
 
-  setTextSettings(TFT_YELLOW, 3);
-
   // Draws game title
+  setTextSettings(TFT_YELLOW, 3);
+  tft.fillRect(0, 0, tft.width(), 50, TFT_BLACK);
   tft.drawString("Guess The Sound!", tft.width() / 2, 25);
-
-  setTextSettings(TFT_BLACK, 2);
 
   // Displays option 1 as the initial selected option
   tft.fillRect(0, 50, tft.width() / 2, (tft.height() - 50) / 2, TFT_CYAN);
 
   // Displays the text for each option in their box
+  setTextSettings(TFT_BLACK, 2);
   tft.drawString(options[0], tft.width() / 4, (tft.height() + 50) / 3); 
   tft.drawString(options[1], tft.width() / 4 * 3, (tft.height() + 50) / 3);
   tft.drawString(options[2], tft.width() / 4, (tft.height() + 50) / 3 * 2);
   tft.drawString(options[3], tft.width() / 4 * 3, (tft.height() + 50) / 3 * 2);
 }
+
+
+/************************************************ END OF SOUND GAME ***************************************************************/
