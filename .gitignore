@@ -30,5 +30,3 @@ coverage
 
 ## Sensitive information
 /includes
-credentials.js
-credentials.ino

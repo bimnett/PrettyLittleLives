@@ -11,10 +11,11 @@ TFT_eSPI tft;
 // Initialize and declare necessary variables for local MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
-const char *MQTT_CLIENT_ID = "enviromentTerminal";
 
-// for the tempature sensor 
-DHT dht(A0, DHT11);   // use pin A0
+// To be able to read the analog readings with the
+// temperature and humidity sensor throug the pin A0
+// DHT11 is the sensor temperature and humidity sensor 
+DHT dht(A0, DHT11);   
 
 
 void setup() {
@@ -45,7 +46,6 @@ void loop() {
   dtostrf(temperature,5, 1, temp_char);
   mqttClient.publish("pll/sensor/temp", temp_char);
 
-  Serial.println(temperature); 
   delay(1000);
 
 }

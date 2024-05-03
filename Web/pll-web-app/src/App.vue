@@ -2,7 +2,7 @@
     <!-- Display the latest MQTT message -->
   <div>mqtt msg: {{ latestMessage }}</div>
 
-  <!-- <Temperature /> is a costume made self closing tag-->
+  <!-- <Temperature /> is a custom made self closing tag-->
   <Temperature />
 </template>
 
