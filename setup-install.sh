@@ -24,3 +24,16 @@ arduino-cli lib install "Seeed Arduino rpcUnified@2.1.4"
 arduino-cli lib install "Seeed Arduino SFUD@2.0.2"
 arduino-cli lib install "Seeed_Arduino_mbedtls@3.0.1"
 arduino-cli lib install "DHT sensor library@1.4.6"
+
+
+
+# Install NodeJS & npm
+curl -fsSL https://deb.nodesource.com/setup_18.x | sh
+apt-get install nodejs -y
+
+
+# Install npm and mqtt library in web app directory
+cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app
+
+npm install mqtt
+npm install
