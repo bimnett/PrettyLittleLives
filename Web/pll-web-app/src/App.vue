@@ -1,18 +1,24 @@
 <template>
     <!-- Display the latest MQTT message -->
   <div>mqtt msg: {{ latestMessage }}</div>
+
+  <!-- <Temperature /> is a custom made self closing tag-->
+  <Temperature />
   <DecibelLevel/>
   
 </template>
 
 <script>
-  // Import the MQTT library and credentials for cluster
-  import mqtt from "mqtt";
-  import { HOST } from "./credentials";
+  import Temperature from './components/Temperature.vue'
   import DecibelLevel from './components/DecibelLevel.vue'
 
   export default {
     name: "App",
+    
+    // connect the componens with the App.vue
+    components : {
+      Temperature : Temperature
+    },
 
     components : {
       DecibelLevel : DecibelLevel
@@ -24,6 +30,7 @@
         latestMessage: "None.",
       };
     },
+
   };
 
   

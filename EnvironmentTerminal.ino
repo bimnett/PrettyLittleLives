@@ -1,4 +1,6 @@
 // #include <Arduino.h> 
+
+#include "DHT.h"
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
@@ -10,7 +12,6 @@ TFT_eSPI tft;
 // Initialize and declare necessary variables for local MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
-const char *MQTT_CLIENT_ID = "enviromentTerminal";
 
 
 const int sampleWindow = 50; // Time frame where millis function will run. 
@@ -22,18 +23,32 @@ void setup()
   setTextSettings();
   connectToWiFi();
   connectToMQTTBroker();
+  dht.begin(); 
+  
 }
 
-void loop()
-{
+void loop() {
   // Re-establish connection if any is lost
   if(!WiFi.isConnected()) {
     connectToWiFi();
   }
-
   if(!mqttClient.loop()) {
     connectToMQTTBroker();
   }
+
+  //read the tempature 
+  float temperature = dht.readTemperature(); 
+
+  // convert temp to string so it can be sent to MQTT broker
+  char temp_char[5];
+  dtostrf(temperature,5, 1, temp_char);
+  mqttClient.publish("pll/sensor/temp", temp_char);
+
+  delay(1000);
+
+}
+
+
 
   unsigned long startMillis = millis();   
   float peakToPeak = 0; 
@@ -67,27 +82,24 @@ void loop()
 
 
 void displayText(char* text) {
-
   tft.fillScreen(0x0000);
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
 
-void connectToWiFi() {
 
+
+void connectToWiFi() {
   // Attempt to connect to the WiFi network until a connection is established
   while(!WiFi.isConnected()) {
-
     displayText("Connecting to WiFi..");
     WiFi.begin(SSID, WIFI_PASSWORD);
     delay(3000);
   }
-
   // Print confirmation
   displayText("Connected!");
 }
 
 void connectToMQTTBroker() {
-
   // Loop until mqtt connection is established
   while(!mqttClient.connected()) {
 
@@ -114,21 +126,19 @@ void connectToMQTTBroker() {
   delay(1000);
 }
 
-// Handle mqtt subscription message.
+
+// to be able to recive mqtt messages 
 void callback(char* topic, byte* payload, unsigned int length) {
-
   char message[length];
-
+  // transform the byte to a readable message 
   for(int i = 0; i < length; i++) {
     message[i] = payload[i];
   }
-
   displayText(message);
 }
 
 // Set text settings and background.
 void setTextSettings() {
-  
   tft.begin();
   tft.setRotation(3);
   tft.setTextSize(2);
@@ -136,5 +146,6 @@ void setTextSettings() {
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
 }
+
 
 
