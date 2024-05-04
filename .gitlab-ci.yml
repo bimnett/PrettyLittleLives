@@ -8,5 +8,8 @@ before_script:
 
 build:
     
+    tags:
+        - docker
+
     script:
         - echo "success"
