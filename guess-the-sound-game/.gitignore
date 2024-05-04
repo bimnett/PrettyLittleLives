@@ -28,3 +28,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+jsconfig.json
+package-lock.json
+package.json
+vite.config.js
