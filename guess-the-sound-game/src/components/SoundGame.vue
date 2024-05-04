@@ -152,6 +152,7 @@
      background: #7D6608;
   }
 
+  /* 4x4 grid that contains the same component image-box */
   .images-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -161,6 +162,7 @@
     gap: 0px;
   }
 
+  /* component that contains both animal-image and animal-name */
   .image-box {
     display: flex;
     flex-direction: column;
@@ -170,6 +172,7 @@
     cursor: pointer;
   }
 
+  /* image featuring the animal */
   .animal-image {
     width: 100%;
     height: 100%;
@@ -179,6 +182,7 @@
     overflow: hidden; /* hides parts of the animal image if it's over image-box's dimensions */
   }
 
+  /* text containing the animal name, shows below animal-image */
   .animal-name {
     font-size: 2rem;
     color: black;
