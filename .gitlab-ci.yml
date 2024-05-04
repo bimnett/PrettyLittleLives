@@ -1,0 +1,12 @@
+image: ubuntu:latest
+
+before_script:
+    # Download arduino-cli & library dependencies
+    - chmod +x setup-install.sh # Change permission to execute the setup-install bash script
+    - ./setup-install.sh # Execute setup-install
+
+
+build:
+    
+    script:
+        - echo "success"
