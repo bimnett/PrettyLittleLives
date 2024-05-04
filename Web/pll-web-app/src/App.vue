@@ -17,12 +17,10 @@
     
     // connect the componens with the App.vue
     components : {
-      Temperature : Temperature
-    },
-
-    components : {
+      Temperature : Temperature,
       DecibelLevel : DecibelLevel
     },
+
 
     data() {
       return {

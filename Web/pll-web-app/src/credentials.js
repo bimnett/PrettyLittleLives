@@ -1,0 +1,1 @@
+export const HOST = 'ws://broker.hivemq.com:8000/mqtt' 

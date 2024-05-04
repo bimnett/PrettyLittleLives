@@ -1,4 +1,3 @@
-// #include <Arduino.h> 
 
 #include "DHT.h"
 #include "rpcWiFi.h"
@@ -16,6 +15,10 @@ PubSubClient mqttClient;
 
 const int sampleWindow = 50; // Time frame where millis function will run. 
 unsigned int soundSample; // sound samples collected within the sampleWindow
+unsigned long startMillis = millis();   
+float peakToPeak = 0; 
+unsigned int signalMax = 0; 
+unsigned int signalMin = 1023; 
 
 void setup()
 {
@@ -46,18 +49,13 @@ void loop() {
 
   delay(1000);
 
-}
 
 
 
-  unsigned long startMillis = millis();   
-  float peakToPeak = 0; 
-  unsigned int signalMax = 0; 
-  unsigned int signalMin = 1023; 
-
+// This function makes sure the sound sample is within the valid range and makes sure that the sound sample is always positive values. 
   while (millis() - startMillis < sampleWindow){ 
-    soundSample = analogRead(0);
-    if(soundSample < 1023){
+    soundSample = analogRead(0); // read analog input from the loudness sensor 
+    if(soundSample < 1023){ 
       if(soundSample > signalMax){
         signalMax = soundSample; 
       }
@@ -67,7 +65,8 @@ void loop() {
     }
   }
   
-  peakToPeak = signalMax - signalMin; 
+  peakToPeak = signalMax - signalMin; // difference between the maximum value and the minimum value 
+  
   // Mapping from anlog to decibel
   float db = map (peakToPeak, 20, 900, 49.5, 90); 
 
@@ -113,7 +112,7 @@ void connectToMQTTBroker() {
     // Configure pubsub client with property setters
     mqttClient.setClient(wifiClient);
     mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-    mqttClient.connect(MQTT_CLIENT_ID); //
+    mqttClient.connect(MQTT_CLIENT_ID); 
     mqttClient.setCallback(callback);
     
     // 3 second cooldown before next connection attempt
