@@ -6,10 +6,12 @@ before_script:
     - ./setup-install.sh # Execute setup-install
 
 
-build:
+compile:
     
     tags:
         - docker
 
     script:
-        - echo "success"
+        # Compile project
+        - chmod +x ci-compile.sh # Change permission to execute the compile bash script
+        - ./ci-compile.sh # Execute ci-compile
