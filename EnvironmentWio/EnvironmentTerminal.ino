@@ -1,9 +1,13 @@
-
-#include "DHT.h"
+#include <DHT.h>
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
 #include "connectionCredentials.h"
+#include "MaryLamb.h"
+#include "WheelsOnTheBus.h"
+
+// Macro define
+#define BUZZER_PIN WIO_BUZZER 
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
@@ -19,6 +23,19 @@ unsigned long startMillis = millis();
 float peakToPeak = 0; 
 unsigned int signalMax = 0; 
 unsigned int signalMin = 1023; 
+// Lower and upper decibel bound for melody player
+const int lowerBound = 50;
+const int upperBound = 60;
+
+// Instance of MaryLamb
+MaryLamb mary(BUZZER_PIN);
+//Instance of WheelsOTheBus
+WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
+
+// To be able to read the analog readings with the
+// temperature and humidity sensor through the pin A0
+// DHT11 is the sensor temperature and humidity sensor 
+DHT dht(A0, DHT11); 
 
 void setup()
 {
@@ -27,6 +44,8 @@ void setup()
   connectToWiFi();
   connectToMQTTBroker();
   dht.begin(); 
+  // Buzzer pin as output
+  pinMode(BUZZER_PIN, OUTPUT); 
   
 }
 
@@ -69,6 +88,14 @@ void loop() {
   
   // Mapping from anlog to decibel
   float db = map (peakToPeak, 20, 900, 49.5, 90); 
+
+  // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db.
+  // Play "The wheels on the bus go round and round" if it exceeds 60db.
+  if(db >= lowerBound && db <= upperBound) {
+    mary.playSong();
+  }else if(db > upperBound){
+    WheelsOnTheBus.playSong();
+  }
 
   // convert to char* to then send it to the mqtt broker
   char db_char[5];
@@ -145,6 +172,3 @@ void setTextSettings() {
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
 }
-
-
-
