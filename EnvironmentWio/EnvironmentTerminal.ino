@@ -3,7 +3,7 @@
 #include <PubSubClient.h>
 #include "includes/connectionCredentials.h"
 #include "MaryLamb.h"
-#include "Twinkle.h"
+#include "WheelsOnTheBus.h"
 
 // Macro define
 #define BUZZER_PIN WIO_BUZZER 
@@ -18,7 +18,7 @@ PubSubClient mqttClient;
 // Instance of MaryLamb
 MaryLamb mary(BUZZER_PIN);
 //Instance of Twinkle
-Twinkle twinkle(BUZZER_PIN);
+WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
 
 
 void setup() {
@@ -50,9 +50,9 @@ void loop() {
   // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db.
   // Play "Twinkle twinkle little star" if it exceeds 60db.
   if(loudnessValue >= 50 && loudnessValue <= 60) {
-      mary.playSong();
+    mary.playSong();
   }else if(loudnessValue > 60){
-    twinkle.playSong();
+    WheelsOnTheBus.playSong();
   }
 }
 

@@ -1,16 +1,16 @@
-class Twinkle {
+class WheelsOnTheBus {
 private:
     // Set an upperbound for tones and beats loop
-    const int length = 12;
-    // Frequencies for the notes C4, C4, G4, G4, A4, A4, G4, F4, F4, E4, E4, D4
-    int tones[12] = { 261, 261, 392, 392, 440, 440, 392, 349, 349, 330, 330, 294 }; 
-    int beats[12] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2 };
+    const int length = 28; 
+    // Frequencies for the notes in "Wheels on the Bus"
+    int tones[28] = { 261, 349, 349, 349, 349, 440, 523, 440, 349, 392, 392, 349, 329, 294, 261, 349, 349, 349, 349, 440, 523, 440, 349, 392, 392, 349, 261, 261 }; 
+    int beats[28] = { 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2 };
     // Tempo/milliseconds, the duration the tone will be played for
     int tempo = 300;
     int buzzerPin;
 
 public:
-    Twinkle(int pin) {
+    WheelsOnTheBus(int pin) {
         // Will be the buzzer pin in EnvironmentalTerminal.ino
         buzzerPin = pin;
     }

@@ -26,7 +26,7 @@ public:
 private:
     void playTone(int tone, int duration) {
         // duration * 1000L is used to convert to milliseconds
-        for (long i = 0; i < duration * 1000L; i += tone * 2) {
+        for (long i = 0; i < duration * 1000L; i = i + tone * 2) {
             // Turn the buzzer on
             digitalWrite(buzzerPin, HIGH);
             delayMicroseconds(tone);
