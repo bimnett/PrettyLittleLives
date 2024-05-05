@@ -3,7 +3,7 @@ export PATH=$PATH:/root/bin
 
 
 # Change directory to EnvironmentTerminal folder
-cd WioTerminals/EnvironmentTerminal
+cd WioTerminal/EnvironmentTerminal
 
 
 # Assign connection credential variables

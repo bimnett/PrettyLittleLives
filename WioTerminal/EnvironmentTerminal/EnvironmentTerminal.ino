@@ -1,9 +1,13 @@
-
-#include "DHT.h"
+#include <DHT.h>
 #include "rpcWiFi.h"
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
 #include "connectionCredentials.h"
+#include "MaryLamb.h"
+#include "WheelsOnTheBus.h"
+
+// Macro define
+#define BUZZER_PIN WIO_BUZZER 
 
 // Initialize TFT_eSPI object to manipulate screen.
 TFT_eSPI tft;
@@ -12,22 +16,38 @@ TFT_eSPI tft;
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 
+
+const int sampleWindow = 50; // Time frame where millis function will run. 
+unsigned int soundSample; // sound samples collected within the sampleWindow
+unsigned long startMillis = millis();   
+float peakToPeak = 0; 
+unsigned int signalMax = 0; 
+unsigned int signalMin = 1023; 
+// Lower and upper decibel bound for melody player
+const int lowerBound = 50;
+const int upperBound = 60;
+
+// Instance of MaryLamb
+MaryLamb mary(BUZZER_PIN);
+//Instance of WheelsOTheBus
+WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
+
 // To be able to read the analog readings with the
-// temperature and humidity sensor throug the pin A0
+// temperature and humidity sensor through the pin A0
 // DHT11 is the sensor temperature and humidity sensor 
-DHT dht(A0, DHT11);   
+DHT dht(A0, DHT11); 
 
-
-void setup() {
-  // put your setup code here, to run once:
+void setup()
+{
   Serial.begin(9600);
   setTextSettings();
   connectToWiFi();
   connectToMQTTBroker();
   dht.begin(); 
+  // Buzzer pin as output
+  pinMode(BUZZER_PIN, OUTPUT); 
   
 }
-
 
 void loop() {
   // Re-establish connection if any is lost
@@ -48,6 +68,42 @@ void loop() {
 
   delay(1000);
 
+
+
+
+// This function makes sure the sound sample is within the valid range and makes sure that the sound sample is always positive values. 
+  while (millis() - startMillis < sampleWindow){ 
+    soundSample = analogRead(0); // read analog input from the loudness sensor 
+    if(soundSample < 1023){ 
+      if(soundSample > signalMax){
+        signalMax = soundSample; 
+      }
+      else if (soundSample < signalMin){
+        signalMin = soundSample; 
+      }
+    }
+  }
+  // peakToPeak is a measure of difference between the maximum peak and the minimum peak of a soundwave. 
+  peakToPeak = signalMax - signalMin; 
+  
+  // Mapping from anlog to decibel
+  float db = map (peakToPeak, 20, 900, 49.5, 90); 
+
+  // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db.
+  // Play "The wheels on the bus go round and round" if it exceeds 60db.
+  if(db >= lowerBound && db <= upperBound) {
+    mary.playSong();
+  }else if(db > upperBound){
+    WheelsOnTheBus.playSong();
+  }
+
+  // convert to char* to then send it to the mqtt broker
+  char db_char[5];
+  dtostrf(db,5, 1, db_char); 
+
+  mqttClient.publish("pll/sensor/soundLevel", db_char);
+  Serial.println(db);
+  delay(1000);
 }
 
 
@@ -55,6 +111,7 @@ void displayText(char* text) {
   tft.fillScreen(0x0000);
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
+
 
 
 void connectToWiFi() {
@@ -67,7 +124,6 @@ void connectToWiFi() {
   // Print confirmation
   displayText("Connected!");
 }
-
 
 void connectToMQTTBroker() {
   // Loop until mqtt connection is established
@@ -83,7 +139,7 @@ void connectToMQTTBroker() {
     // Configure pubsub client with property setters
     mqttClient.setClient(wifiClient);
     mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-    mqttClient.connect(MQTT_CLIENT_ID);
+    mqttClient.connect(MQTT_CLIENT_ID); 
     mqttClient.setCallback(callback);
     
     // 3 second cooldown before next connection attempt
@@ -106,7 +162,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   displayText(message);
 }
-
 
 // Set text settings and background.
 void setTextSettings() {
