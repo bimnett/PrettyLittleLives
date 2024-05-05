@@ -19,6 +19,7 @@ coverage
 
 # Editor directories and files
 .vscode/*
+!.vscode/extensions.json
 .idea
 *.suo
 *.ntvs*
@@ -28,6 +29,7 @@ coverage
 
 *.tsbuildinfo
 
-## Sensitive information
-/includes
-credentials.js
+jsconfig.json
+package-lock.json
+package.json
+vite.config.js

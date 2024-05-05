@@ -14,7 +14,7 @@ public:
         // Will be the buzzer pin in EnvironmentalTerminal.ino
         buzzerPin = pin;
     }
-
+public:
     void playSong() {
         for(int i = 0; i < length; i++) {
             // The tone will be played for the number of beats * 300

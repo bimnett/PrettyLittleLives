@@ -1,5 +1,5 @@
 {
-  "name": "pll-web-app",
+  "name": "guess-the-sound-game",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "mqtt": "^5.5.5",
+    "mqtt": "^5.5.4",
     "vue": "^3.4.21"
   },
   "devDependencies": {

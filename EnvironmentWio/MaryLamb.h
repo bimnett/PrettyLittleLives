@@ -2,10 +2,10 @@ class MaryLamb {
 private:
     // Set an upperbound for tones and beats loop
     const int length = 10;
-    // Frequencies for the notes E4, D4, C4, D4, E4, E4, E4, D4, D4, D4
+    // Frequencies for the notes in "Mary had a little lamb"
     int tones[10] = { 329, 294, 261, 294, 329, 329, 329, 294, 294, 294 }; 
     int beats[10] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 2 }; 
-     // Tempo/milliseconds, the duration the tone will be played for
+    // Tempo/milliseconds, the duration the tone will be played for
     int tempo = 300;
     int buzzerPin;
 
@@ -14,7 +14,7 @@ public:
         // Buzzer pin in EnvironmentalTerminal.ino
         buzzerPin = pin;
     }
-
+public:
     void playSong() {
         for(int i = 0; i < length; i++) {
             // The tone will be played for the number of beats * 300
