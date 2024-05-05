@@ -64,8 +64,8 @@ void loop() {
       }
     }
   }
-  
-  peakToPeak = signalMax - signalMin; // difference between the maximum value and the minimum value 
+  // peakToPeak is a measure of difference between the maximum peak and the minimum peak of a soundwave. 
+  peakToPeak = signalMax - signalMin; 
   
   // Mapping from anlog to decibel
   float db = map (peakToPeak, 20, 900, 49.5, 90); 
