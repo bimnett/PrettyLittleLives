@@ -23,7 +23,7 @@ unsigned long startMillis = millis();
 float peakToPeak = 0; 
 unsigned int signalMax = 0; 
 unsigned int signalMin = 1023; 
-// Lower and upper bound for melody player
+// Lower and upper decibel bound for melody player
 const int lowerBound = 50;
 const int upperBound = 60;
 
