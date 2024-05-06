@@ -6,12 +6,19 @@ Pretty Little Lives (PLL) offers teachers a real-time environment monitoring sys
 ## Getting Started
 ### Dependencies
 
-VSCode, Arduino, MQTT.js, Wio Terminal, Loudness sensor, Buzzer.
+VSCode, Arduino, MQTT.js, Wio Terminal, Loudness sensor, Buzzer, Grove - Temperature&Humidity Sensor (DHT11).
 
 ### Installing
 
 * VSCode: https://code.visualstudio.com/
 * Arduino: https://www.arduino.cc/en/software
+* Node.js: https://nodejs.org/en
+* Vue: https://vuejs.org/
+To install vue.js, run the following NPM command.
+```
+npm install vue
+```
+* MQTT.js: https://github.com/mqttjs
 * To install MQTT.js, run the following NPM command.
 ```
 npm install mqtt
