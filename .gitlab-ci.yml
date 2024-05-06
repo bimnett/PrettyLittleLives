@@ -1,0 +1,17 @@
+image: ubuntu:latest
+
+before_script:
+    # Download arduino-cli & library dependencies
+    - chmod +x setup-install.sh # Change permission to execute the setup-install bash script
+    - ./setup-install.sh # Execute setup-install
+
+
+compile:
+    
+    tags:
+        - docker
+
+    script:
+        # Compile project
+        - chmod +x ci-compile.sh # Change permission to execute the compile bash script
+        - ./ci-compile.sh # Execute ci-compile
