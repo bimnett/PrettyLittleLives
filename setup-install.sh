@@ -33,7 +33,7 @@ apt-get install nodejs -y
 
 
 # Install npm and mqtt library in web app directory
-cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app
+cd ../../Web/pll-web-app
 
 npm install mqtt
 npm install
