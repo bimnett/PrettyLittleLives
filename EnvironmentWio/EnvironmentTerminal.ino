@@ -31,6 +31,20 @@ float peakToPeak = 0;
 unsigned int signalMax = 0; 
 unsigned int signalMin = 1023; 
 
+// Lower and upper decibel bound for melody player
+const int lowerBound = 50;
+const int upperBound = 60;
+
+// Instance of MaryLamb
+MaryLamb mary(BUZZER_PIN);
+//Instance of WheelsOTheBus
+WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
+
+// To be able to read the analog readings with the
+// temperature and humidity sensor through the pin A0
+// DHT11 is the sensor temperature and humidity sensor 
+DHT dht(A0, DHT11);
+
 void setup(){
   Serial.begin(9600);
   setTextSettings();
