@@ -3,6 +3,8 @@
 #include "TFT_eSPI.h"
 #include <PubSubClient.h>
 #include "connectionCredentials.h"
+#include <Grove_LED_Bar.h>
+
 #include "MaryLamb.h"
 #include "WheelsOnTheBus.h"
 
@@ -16,6 +18,11 @@ TFT_eSPI tft;
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 
+// To be able to read the analog readings with the
+// temperature and humidity sensor throug the pin A0
+// DHT11 is the sensor temperature and humidity sensor 
+DHT dht(A0, DHT11);   
+Grove_LED_Bar bar(A1, A0, 1);  // Clock pin, Data pin, Orientation
 
 const int sampleWindow = 50; // Time frame where millis function will run. 
 unsigned int soundSample; // sound samples collected within the sampleWindow
@@ -23,22 +30,8 @@ unsigned long startMillis = millis();
 float peakToPeak = 0; 
 unsigned int signalMax = 0; 
 unsigned int signalMin = 1023; 
-// Lower and upper decibel bound for melody player
-const int lowerBound = 50;
-const int upperBound = 60;
 
-// Instance of MaryLamb
-MaryLamb mary(BUZZER_PIN);
-//Instance of WheelsOTheBus
-WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
-
-// To be able to read the analog readings with the
-// temperature and humidity sensor through the pin A0
-// DHT11 is the sensor temperature and humidity sensor 
-DHT dht(A0, DHT11); 
-
-void setup()
-{
+void setup(){
   Serial.begin(9600);
   setTextSettings();
   connectToWiFi();
@@ -46,6 +39,7 @@ void setup()
   dht.begin(); 
   // Buzzer pin as output
   pinMode(BUZZER_PIN, OUTPUT); 
+  bar.begin(); // initialise ledbar 
   
 }
 
@@ -96,6 +90,7 @@ void loop() {
   }else if(db > upperBound){
     WheelsOnTheBus.playSong();
   }
+  setLedbar(db); // Light upp the ledbar, according to the decibel value.
 
   // convert to char* to then send it to the mqtt broker
   char db_char[5];
@@ -104,6 +99,7 @@ void loop() {
   mqttClient.publish("pll/sensor/soundLevel", db_char);
   Serial.println(db);
   delay(1000);
+
 }
 
 
@@ -172,3 +168,20 @@ void setTextSettings() {
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
 }
+
+void setLedbar(int soundLevel) {
+    if (soundLevel <= 30) {
+        bar.setLevel(3);
+    } else if (soundLevel <= 50) { 
+        bar.setLevel(5);
+    } else if (soundLevel <= 70) { 
+        bar.setLevel(7);
+    } else if (soundLevel <= 80) { 
+        bar.setLevel(8);
+    } else if (soundLevel > 80) { 
+        bar.setLevel(10);
+    } else {
+        bar.setLevel(1);
+    }
+}
+
