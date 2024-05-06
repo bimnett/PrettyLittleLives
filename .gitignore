@@ -30,7 +30,4 @@ coverage
 
 ## Sensitive information
 /includes
-
-package-lock.json
-package.json
-jsconfig.json
+credentials.js
