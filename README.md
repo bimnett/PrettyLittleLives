@@ -3,8 +3,8 @@
 ## Navigation Menu
 - [Product Description](#product-description)
 - [Purpose & Benefits](#purpose--benefits)
-- [Get Started](#setup-and-get-started-end-user)
 - [System Architecture & Components](#system-architecture--components)
+- [Get Started](#setup-and-get-started-end-user)
 - [Contributors](#contributors)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -22,6 +22,7 @@ Pretty Little Lives (PLL) is specifically designed with educators in mind, offer
 
 * **Integration of Technology and Education**: PLL wants to bridge the gap between technology and education by incorporating hardware components and a dedicated webpage. It leverages innovative solutions to enhance the teaching and learning process, while also fostering a collaborative and interactive classroom environment.
 
+<Styling command to add more space between paragraphs>
 &nbsp;  
 
 **Benefits**
@@ -43,7 +44,7 @@ A higher resolution diagram can be found [here](https://git.chalmers.se/courses/
 ![diagram](https://cdn.discordapp.com/attachments/1043280587689037866/1237460216736514138/Architecture_diagram_-_Final_diagram.png?ex=663bba22&is=663a68a2&hm=c222bf2fc65d415f3a9f1a7971b88b51eb2990fa259fc537239bfb784359354a&)
 
 The PLL system consists of several hardware components:
-- Sound level sensor.
+- Sound level sensor
 - Temperature sensor
 - LED bar for visual alerts (green, yellow, and red).
 - Environment Terminal for classroom.
