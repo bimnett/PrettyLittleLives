@@ -35,6 +35,7 @@ unsigned int signalMin = 1023;
 const int lowerBound = 50;
 const int upperBound = 60;
 
+// Decibel thresholds for setLedbar function 
 const int lowThreshold = 30; 
 const int mediumLowThreshold = 50; 
 const int mediumHighThreshold = 70; 
