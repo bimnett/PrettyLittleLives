@@ -190,17 +190,17 @@ void setTextSettings() {
 
 void setLedbar(int soundLevel) {
     if (soundLevel <= lowThreshold) {
-        bar.setLevel(3);
+        bar.setLevel(3); // lights up 3 lights on the ledbar 
     } else if (soundLevel <= mediumLowThreshold) { 
-        bar.setLevel(5);
+        bar.setLevel(5); // lights up 5 lights on the ledbar 
     } else if (soundLevel <= mediumHighThreshold) { 
-        bar.setLevel(7);
+        bar.setLevel(7); // lights up 7 lights on the ledbar
     } else if (soundLevel <= highThreshold) { 
-        bar.setLevel(8);
+        bar.setLevel(8); // lights up 8 lights on the ledbar
     } else if (soundLevel > highThreshold) { 
-        bar.setLevel(10);
+        bar.setLevel(10); // lights up 10 lights on the ledbar
     } else {
-        bar.setLevel(1);
+        bar.setLevel(1); // lights up 1 light on the ledbar
     }
 }
 
