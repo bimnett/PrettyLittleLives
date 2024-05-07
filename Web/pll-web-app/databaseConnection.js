@@ -21,7 +21,7 @@ async function main(){
 
 main().catch(console.error);
 
-// just to list 
+// List all databases
 async function listDatabases(client){
     const databasesList = await client.db().admin().listDatabases();
 
