@@ -2,16 +2,36 @@ image: ubuntu:latest
 
 before_script:
     # Download arduino-cli & library dependencies
-    - chmod +x setup-install.sh # Change permission to execute the setup-install bash script
-    - ./setup-install.sh # Execute setup-install
+    - chmod +x setup-install.sh # Change permission to execute setup-install.sh
+    - ./setup-install.sh # Execute setup-install.sh
 
 
-compile:
+# Build for Environment & Game terminals
+build-arduino:
     
     tags:
         - docker
 
     script:
-        # Compile project
-        - chmod +x ci-compile.sh # Change permission to execute the compile bash script
-        - ./ci-compile.sh # Execute ci-compile
+        - chmod +x ci-build-arduino.sh # Change permission to execute ci-build-arduino.sh
+        - ./ci-build-arduino.sh # Execute ci-build-arduino.sh
+
+
+# Build for web app
+build-web-app:
+
+    tags:
+        - docker
+
+    script:
+        # Change directory to src folder of web app
+        - cd Web/pll-web-app/src
+
+        # Add mqtt credentials
+        - echo "export const HOST = '$WEB_MQTT_HOST';" > credentials.js
+
+        # Move back to web app directory before build
+        - cd ..
+
+        # Build web app
+        - npm run build
