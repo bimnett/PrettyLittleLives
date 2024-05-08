@@ -16,7 +16,7 @@
   
 <script>
   import { ref, onMounted } from 'vue';
-  import { animals } from '@/assets/animal.js'; 
+  import { animals } from '../../../Web/pll-web-app/src/assets/animal.js'; 
   import mqtt from 'mqtt';
   import { HOST } from "../credentials";
   
