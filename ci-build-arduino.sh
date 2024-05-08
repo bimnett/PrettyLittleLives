@@ -30,16 +30,3 @@ echo "#define MQTT_PORT $TERMINAL_MQTT_PORT" >> connectionCredentials.h
 
 # Compile GameTerminal sketch
 arduino-cli compile --fqbn Seeeduino:samd:seeed_wio_terminal
-
-
-# Change directory to src folder of web app
-cd ../../Web/pll-web-app/src
-
-# Add mqtt credentials
-echo "export const HOST = '$WEB_MQTT_HOST';" > credentials.js
-
-# Move back to web app directory before build
-cd ..
-
-# Build
-npm run build
