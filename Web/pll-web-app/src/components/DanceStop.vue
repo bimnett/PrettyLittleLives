@@ -1,13 +1,17 @@
 <template>
     <H1> Lest play DanceStop </H1>
-
+    <div>
+        
+    </div>
     <!-- different content is shown when clicking on button -->
     <div v-if="showDanceNow">
         {{ dance }}
+       <img src="../../assets/dance.png"> 
     </div>
 
     <div v-if="!showDanceNow"> 
         {{ standStill }}
+        <img src="../../assets/stop.png">
     </div>
 
     <!-- when the buttom is clicked the method toggleStartDance is executed -->
