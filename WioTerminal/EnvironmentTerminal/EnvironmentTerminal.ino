@@ -46,10 +46,6 @@ MaryLamb mary(BUZZER_PIN);
 //Instance of WheelsOTheBus
 WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
 
-// To be able to read the analog readings with the
-// temperature and humidity sensor through the pin A0
-// DHT11 is the sensor temperature and humidity sensor 
-DHT dht(A0, DHT11);
 
 void setup(){
   Serial.begin(9600);
