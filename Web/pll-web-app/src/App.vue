@@ -10,6 +10,8 @@
   <DanceStop/>
   <div class="rectangle"></div>
   <Temperature />
+  <div class="rectangle"></div>
+  <SoundGame/>
 
 </template>
 
@@ -17,6 +19,7 @@
   import Temperature from './components/Temperature.vue'
   import DecibelLevel from './components/DecibelLevel.vue'
   import DanceStop from './components/DanceStop.vue'
+  import SoundGame from './components/SoundGame.vue'
 
   export default {
     name: "App",
@@ -26,7 +29,7 @@
       Temperature : Temperature,
       DecibelLevel : DecibelLevel,
       DanceStop : DanceStop,
-      //SoundGame : SoundGame
+      SoundGame : SoundGame
     },
 
 
