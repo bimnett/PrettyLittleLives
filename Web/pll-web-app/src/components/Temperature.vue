@@ -6,7 +6,8 @@
     // Import the MQTT library and credentials for cluster
     import mqtt from "mqtt";
     import { HOST } from "@/credentials";
-
+    import { saveTemperature } from "@/databaseConnection";
+    
     export default{
         // name of this component 
         name : "Temperature",  
@@ -39,6 +40,7 @@
             client.on("message", (topic, message) => {
             // Update the latest message
             this.temp = message.toString();
+            saveTemperature(this.temp);
             });
 
         },
