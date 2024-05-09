@@ -1,12 +1,16 @@
 <template>
     <!-- Display the latest MQTT message -->
-  <div>mqtt msg: {{ latestMessage }}</div>
-
-  <!-- <Temperature /> is a custom made self closing tag-->
+  <div class="title" >
+    <h1 >Welcome to Pretty Little Lives (PLL)</h1>
+  </div>
+  <!-- <Temperature /> is a custom made self closing tag--> 
+ 
+  <DecibelLevel />
+  <div class="rectangle"></div>
+  <DanceStop/>
+  <div class="rectangle"></div>
   <Temperature />
-  <DecibelLevel/>
-  <DanceStop/> 
-  
+
 </template>
 
 <script>
@@ -22,6 +26,7 @@
       Temperature : Temperature,
       DecibelLevel : DecibelLevel,
       DanceStop : DanceStop,
+      //SoundGame : SoundGame
     },
 
 
@@ -39,4 +44,16 @@
 </script>
 
 <style>
+.title {
+  border: 0.0px solid;
+  width: 100%;
+  padding: 10px;
+  background-color: #FFDE59;
+  text-align:center
+}
+.rectangle {
+  height: 20px;
+  width: 5000;
+  background-color:  #FFDE59;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <H1> Lest play DanceStop </H1>
+    <h2> Lest play DanceStop </h2>
     <div>
         
     </div>
