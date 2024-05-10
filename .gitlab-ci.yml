@@ -5,10 +5,17 @@ before_script:
     - chmod +x setup-install.sh # Change permission to execute setup-install.sh
     - ./setup-install.sh # Execute setup-install.sh
 
+# Define stages of the pipeline
+stages: 
+    - build
+    - deploy
+
 
 # Build for Environment & Game terminals
 build-arduino:
     
+    stage: build
+
     tags:
         - docker
 
@@ -19,6 +26,8 @@ build-arduino:
 
 # Build for web app
 build-web-app:
+
+    stage: build
 
     tags:
         - docker
@@ -35,3 +44,28 @@ build-web-app:
 
         # Build web app
         - npm run build
+
+    artifacts:
+
+        # Save build directory artifact for web app deploy job
+        paths: - Web/pll-web-app/dist
+
+
+# Deployment for web app
+deploy-web-app:
+
+    stage: deploy
+
+    tags:
+        - docker
+
+    script: 
+
+        - echo "Deploying Project.."
+        
+        # Deploy build artifact to website production
+        - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir Web/pll-web-app/dist --prod 
+
+    only:
+        # Only deploy when the main branch is updated
+        - main
