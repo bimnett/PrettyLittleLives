@@ -30,8 +30,6 @@ async function closeClient() {
     }
 }
 
-main().catch(console.error);
-
 // List all databases
 async function listDatabases(client){
     const databasesList = await client.db().admin().listDatabases();
