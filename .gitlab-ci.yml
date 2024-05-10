@@ -48,7 +48,8 @@ build-web-app:
     artifacts:
 
         # Save build directory artifact for web app deploy job
-        paths: - Web/pll-web-app/dist
+        paths: 
+            - Web/pll-web-app/dist
 
 
 # Deployment for web app
