@@ -44,6 +44,7 @@ async function listDatabases(client){
 
 // Save temperature data
 export async function saveTemperature(temp) {
+    await connectClient();
     try {
         const db = client.db('temperature'); // 'temperature' database 
         const collection = db.collection('temp_values'); // 'temp_values' collection
@@ -60,6 +61,7 @@ export async function saveTemperature(temp) {
 
 // Returns array of top 10 highest temperature readings of the day
 export async function getTopTempReadings() {
+    await connectClient();
     try {
         const db = client.db('temperature');
         const collection = db.collection('temp_values');
@@ -81,6 +83,7 @@ export async function getTopTempReadings() {
 
 // Save sound level data
 export async function saveSoundLevel(soundLevel) {
+    await connectClient();
     try {
         const db = client.db('sound');
         const collection = db.collection('decibel_values');
@@ -97,6 +100,7 @@ export async function saveSoundLevel(soundLevel) {
 
 // Returns array of top 10 highest sound level readings of the day
 export async function getTopSoundReadings() {
+    await connectClient();
     try {
         const db = client.db('sound');
         const collection = db.collection('decibel_values');
