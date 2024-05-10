@@ -1,8 +1,9 @@
 <template>
   <div class="game-container">
     <div class="header">
+      <button class="control-button" @click="playSound">Play Sound</button>
       <h1 class="title">Guess the Animal!</h1>
-      <button class="sound-button" @click="playSound">Play Sound</button>
+      <button class="control-button" onclick="window.location.reload()">Next Animal</button>
       <audio :src="selectedSound" ref="audioPlayer"></audio>
     </div>
     <div class="images-grid">
@@ -16,7 +17,7 @@
   
 <script>
   import { ref, onMounted } from 'vue';
-  import { animals } from '@/assets/animal.js'; 
+  import { animals } from '../../assets/animal.js'; 
   import mqtt from 'mqtt';
   import { HOST } from "../credentials";
   
@@ -56,8 +57,8 @@
         audioPlayer.value.play();
       };
       
-      const checkAnswer = (animalName) => {
-        if (animalName === selectedAnimal.value.name) {
+      const checkAnswer = (animal) => {
+        if (animal.name === selectedAnimal.value.name) {
           alert("Correct!");
           mqttClient.publish(mqttTopicCheckAnswer, "correct");
         } else {
@@ -75,7 +76,7 @@
         };        
         
         mqttClient.on('connect', () => {
-          console.log('Connected to local MQTT broker');
+          console.log('Connected to MQTT broker');
           mqttClient.subscribe([mqttTopicReplay, mqttTopicAnswer]);
           publishAnimalNames(); // publishes a string of animal names to the broker
         });
@@ -131,11 +132,12 @@
     line-height: 1.8;
     margin: 0;
     color: #7D6608;
-    font-family:'Impact';    
+    font-family:'Impact';   
+    text-align: center; 
   }
 
 
-  .sound-button {
+  .control-button {
     background-color: #B7950B;
     border: none;
     color: white;
@@ -148,7 +150,7 @@
     cursor: pointer;
   }
 
-  .sound-button:hover{
+  .control-button:hover{
      background: #7D6608;
   }
 
