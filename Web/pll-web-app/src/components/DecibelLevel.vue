@@ -35,6 +35,7 @@
         client.on("message", (topic, message) => {
         // Update the latest message
             this.soundLevel = message.toString();
+            saveSoundLevel(this.soundLevel);
         });
 
     },
