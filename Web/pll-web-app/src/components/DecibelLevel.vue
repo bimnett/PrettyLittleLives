@@ -1,6 +1,6 @@
 <template>
-  <h2>Decibel</h2>
-  <div>Current decibel level: {{ soundLevel }} db</div>
+    <h2>Decibel Level</h2>
+    <div>Current decibel level: {{ soundLevel }} db</div>
   </template>
   
   <script>
