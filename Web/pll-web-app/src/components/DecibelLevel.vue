@@ -6,7 +6,7 @@
   // Import the MQTT library and credentials for cluster
   import mqtt from "mqtt"; 
   import {HOST} from "@/credentials";
-  import { saveSoundLevel } from "../databaseConnection";
+  import { saveSoundLevel } from "../../databaseConnection";
   
   export default {
     name: "DecibelLevel", 
