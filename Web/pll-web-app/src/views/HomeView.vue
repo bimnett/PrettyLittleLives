@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
-</template>
+    <div class="home">
+      <h1>Welcome to Pretty Little Lives (PLL)</h1>
+      <img alt="Vue logo" src="../../assets/Favicon.png" height="300" width="300">
+    </div>
+    <InfoPLL></InfoPLL>
+  </template>
+  
+  <script>
+  // @ is an alias to /src
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
+  import InfoPLL from '@/components/InfoPLL.vue'
+  
+  export default {
+    name: 'HomeView',
+    components: { 
+      InfoPLL
+    }
   }
-}
-</script>
+  </script>

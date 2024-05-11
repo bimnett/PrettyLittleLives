@@ -1,16 +1,13 @@
 <template>
   <nav>
     <router-link :to=" { name : 'home'}">Home</router-link> |
-    <router-link :to="{ name : 'about'}">About</router-link> |
-    <router-link :to="{name : 'jobs'}">Jobs</router-link> |
-    <router-link :to="{name : 'games'}">Games</router-link> 
-    
+    <router-link :to=" { name : 'environment'}">Environment readings</router-link> |
   </nav>
   <router-view/>
 </template>
 
 <script>
-//<router-link :to="{ name 'decibellevel'}"></router-link>
+
 </script>
 
 
