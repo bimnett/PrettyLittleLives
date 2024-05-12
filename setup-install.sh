@@ -34,8 +34,13 @@ curl -fsSL https://deb.nodesource.com/setup_18.x | sh
 apt-get install nodejs -y
 
 
-# Install npm and mqtt library in web app directory
+# Install necessary node packages in web app directory
 cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app/
 
 npm install mqtt
+
+# Install netlify for web app deployment
+npm install netlify -g
+export PATH=$PATH:/root/bin
+
 npm install
