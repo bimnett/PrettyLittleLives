@@ -1,33 +1,32 @@
 <template>
-    <H1> Lest play DanceStop </H1>
     <div>
-        
-    </div>
-    <!-- different content is shown when clicking on button -->
+        <h1> Lets play DanceStop </h1>
+
+    <!-- different content is shown on the webpage by clicking on button -->
     <div v-if="showDanceNow">
-        {{ dance }}
-       <img src="../../assets/dance.png"> 
+        <h2>{{ dance }}</h2>
+       <img src="../../assets/dance.png" alt ="Dancing stick figure"> 
     </div>
 
-    <div v-if="!showDanceNow"> 
-        {{ standStill }}
-        <img src="../../assets/stop.png">
+    <div v-else> 
+        <h2>{{ standStill }}</h2>
+        <img src="../../assets/stop.png" alt ="Stop sign">
     </div>
+
 
     <!-- when the buttom is clicked the method toggleStartDance is executed -->
-    <button @click="[toggleStartDance(), sendDanceState(ShowDanceNow)]">
-        <!-- different names gets displayed on button -->
-        <span v-if="showDanceNow">Start dance</span>
-        <span v-if="!showDanceNow">Stop</span>
+    <button @click="toggleStartDance">
+        <!-- different button-titles gets displayed on button -->
+        <span v-if="showDanceNow">Stop</span>
+        <span v-else>Start dance</span>
     </button>
-    
-    
+    </div>
 </template>
 
 <script> 
     import mqtt from "mqtt"; 
     import {HOST} from '@/credentials';
-    const client=mqtt.connect(HOST);
+
 
     export default {
         name : "DanceStop", 
@@ -47,48 +46,28 @@
             // change so it shitfs between dance and stop on webpage
             toggleStartDance() {
                 this.showDanceNow = !this.showDanceNow;
+                this.sendDanceState(this.showDanceNow); // Sends MQTT message about the dance state. If its stop or dance.
             },
 
-            // to notify so the terminal can change its' screen color accordingly 
-            sendDanceState(showDanceNow){
-                
-                // when kids shall dance send a 1
-                if (showDanceNow==true){
-                    moveState = executeDance;
-                }else{
-                    // when kids shall be still send 0
-                    moveState = executeStill;
-                }
-                client.publish("pll/game/dancestop/state", moveState);
-            }
-        },
-
-        mounted() {
-            // Connect to MQTT broker
-            //const client = mqtt.connect(HOST);
-
-            // do not know if this is needed?
-            // Subscribe to the MQTT topic
+        // Function to send MQTT message so that the wio terminal can change it's screen color accordingly and change state from dancing to standing still 
+        sendDanceState(showDanceNow) {
+            const moveState = showDanceNow ? this.executeDance : this.executeStill;
+            const client = mqtt.connect(HOST);
             client.on("connect", () => {
-                // subscribing to the dancestop topic 
-            client.subscribe("pll/game/dancestop");
+             client.publish("pll/game/dancestop/state", moveState.toString());
             });
+        },
+    },
+    mounted() {
 
             // When connection failed
             client.on('error', (error) => {
             console.error('Connection failed:', error);
             client.end();
             });
-
-            // Receive messages
-            client.on("message", (topic, message) => {
-            // Update the latest message
-            this.temp = message.toString();
-            });
-
         },
+  };
 
+  </script>
 
-    } 
-
-</script>
+   
