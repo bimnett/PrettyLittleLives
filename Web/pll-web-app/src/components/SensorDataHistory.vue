@@ -37,44 +37,6 @@
     };
 </script>
 
-<template>
-    <div class="sensor-data-history">
-        <h2>Top 10 Highest Temperature Readings Today</h2>
-        <ul class="temp-readings">
-            <li v-for="reading in topTempReadings" :key="reading._id">
-                {{ reading.temperature }} °C at {{ new Date(reading.timestamp).toLocaleTimeString() }}
-            </li>
-        </ul>
-
-        <h2>Top 10 Highest Sound Level Readings Today</h2>
-        <ul class="sound-readings">
-            <li v-for="reading in topSoundReadings" :key="reading._id">
-                {{ reading.soundLevel }} dB at {{ new Date(reading.timestamp).toLocaleTimeString() }}
-            </li>
-        </ul>
-    </div>
-</template>
-
-<script>
-    import { getTopTempReadings, getTopSoundReadings } from "./src/components/databaseConnection";
-
-    export default {
-        name: "SensorDataHistory",
-
-        data() {
-            return {
-                topTempReadings: [],
-                topSoundReadings: []
-            };
-        },
-
-        async mounted() {
-            this.topTempReadings = await getTopTempReadings();
-            this.topSoundReadings = await getTopSoundReadings();
-        }
-    };
-</script>
-
 <style>
 .sensor-data-history {
     font-family:'Comic Sans MS';
