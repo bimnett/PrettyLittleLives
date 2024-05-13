@@ -25,7 +25,7 @@ arduino-cli lib install "Seeed Arduino SFUD@2.0.2"
 arduino-cli lib install "Seeed_Arduino_mbedtls@3.0.1"
 arduino-cli lib install "DHT sensor library@1.4.6"
 arduino-cli lib install "Grove LED Bar@1.0.0"
-arduino-cli lib install "LIS3DHTR@1.2.4"
+arduino-cli lib install "Grove-3-Axis-Digital-Accelerometer-2g-to-16g-LIS3DHTR@1.2.4"
 
 
 
