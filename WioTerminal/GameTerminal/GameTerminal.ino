@@ -1,16 +1,22 @@
+
 #include "TFT_eSPI.h"
 #include "rpcWiFi.h"
 #include <PubSubClient.h>
 #include <cstring>
 #include "connectionCredentials.h"
+#include <LIS3DHTR.h> // Library for built-in accelerometer 
+
 
 // Declare tft object for manipulating the wio terminal screen.
 TFT_eSPI tft;
+LIS3DHTR <TwoWire> motion; // Uses the TwoWire interface 
+
 
 
 // Declare necessary variables for MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
+bool isDancing = false;
 
 
 void setup() {
@@ -26,6 +32,9 @@ void setup() {
 
   // Initializes button on the terminal
   pinMode(WIO_KEY_C, INPUT_PULLUP);
+  pinMode(WIO_BUZZER, OUTPUT);
+  motion.begin(Wire1); // Wire1 is part of the TwoWire interface
+
 
   // Initializes the tft object and the initial background
   setTextSettings();
@@ -37,6 +46,16 @@ void setup() {
   // Subscribe to sound game topics
   mqttClient.subscribe("pll/game-terminal/sound-game/options");
   mqttClient.subscribe("pll/game-terminal/sound-game/check-answer");
+  mqttClient.subscribe("pll/game/dancestop/state");
+
+   // Checks if the built-in accelerometer sensor is initialised, if not prints an error message and halts the rest of the program.  
+  if (!motion) { 
+    Serial.println("Error"); 
+    while (1);
+  }
+  motion.setOutputDataRate(LIS3DHTR_DATARATE_25HZ); 
+  motion.setFullScaleRange(LIS3DHTR_RANGE_2G); 
+
 }
 
 void loop() {
@@ -48,10 +67,13 @@ void loop() {
   if(!mqttClient.loop()) {
     connectToMQTTBroker();
   }
+  
 
   // Track user input for the sound game
   replaySound();
   handleJoystickInput();
+  detectMotion(); 
+
 }
 
 
@@ -108,22 +130,69 @@ void connectToMQTTBroker() {
   delay(1000);
 }
 
+void detectMotion() {
+  float xValues = motion.getAccelerationX(); // Retrieves the acceleration on the x-axis which is direction: Forward  
+  float yValues = motion.getAccelerationY(); // Retrieves the acceleration on the y-axis which is direction: Sideways 
+  float zValues = motion.getAccelerationZ(); // Retrieves the acceleration on the z-axis which is direction: Upwards 
 
-// Retrieves mqtt subscription message.
-// Is automatically called when a message is received.
-void callback(char* topic, byte* payload, unsigned int length) {
+  // Calculate total acceleration magnitude
+  float totalAcceleration = sqrt((yValues * yValues) + (zValues * zValues) + (xValues * xValues)); 
 
-  char message[length];
-
-  // Convert byte payload of the message to a character array.
-  for(int i = 0; i < length; i++) {
-    message[i] = payload[i];
+  float motionThreshold = 1.04; 
+  
+  if (isDancing) {
+    tft.fillScreen(TFT_GREEN); // Change screen color to green
+    if (totalAcceleration > motionThreshold) {
+      Serial.println("Motion detected - Keep dancing"); 
+    } else {
+      Serial.println("No motion detected - Dance!"); 
+      playBuzzer(); // Play buzzer when no motion detected but user should keep dancing
+    }
+  } else {
+    tft.fillScreen(TFT_RED); // Change screen color to red
+    if (totalAcceleration < motionThreshold) {
+      Serial.println(" No motion detected"); 
+    } else {
+      Serial.println("Motion detected - Stop!");
+      playBuzzer(); // Play buzzer when motion detected but user should stop
+    }
   }
+    delay(100); 
 
-  handleSubMessage(message, topic);
+}
+
+void playBuzzer() {
+  analogWrite(WIO_BUZZER, 150); 
+  delay(1000); 
+  analogWrite(WIO_BUZZER, 0); 
+  delay(1000); 
 }
 
 
+// Retrieves mqtt subscription message.
+// Is automatically called when a message is received.
+// Checks the topic to decide if it is's related to sound game or danceStop game 
+void callback(char* topic, byte* payload, unsigned int length) {
+  
+  if((strcmp(topic, "pll/game-terminal/sound-game/options") == 0 ||
+      strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0)){
+        char message[length];
+        for(int i = 0; i < length; i++) {
+        message[i] = payload[i];
+        }
+      handleSubMessage(message, topic);
+
+    } else {
+      // Convert byte payload of the message to a character array.
+      int message = atoi((char*)payload);
+      // Check message content and change the state accordingly
+      if (message == 1) {
+        isDancing = true;
+      } else if (message == 0) {
+        isDancing = false;
+      }
+    }
+}
 
 // Handler that triggers different actions depending on topic and subscription message. 
 void handleSubMessage(char message[], const char* topic) {
@@ -444,3 +513,4 @@ void startSoundGame() {
 
 
 /************************************************ END OF SOUND GAME ***************************************************************/
+

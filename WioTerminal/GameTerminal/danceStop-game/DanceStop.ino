@@ -37,7 +37,13 @@ void loop() {
     connectToMQTT();
   }
   mqttClient.loop();
+  checkMotion(); 
 
+
+ 
+  delay(100); 
+}
+void checkMotion() {
   float xValues = motion.getAccelerationX(); // Retrieves the acceleration on the x-axis which is direction: Forward  
   float yValues = motion.getAccelerationY(); // Retrieves the acceleration on the y-axis which is direction: Sideways 
   float zValues = motion.getAccelerationZ(); // Retrieves the acceleration on the z-axis which is direction: Upwards 
@@ -64,9 +70,8 @@ void loop() {
       playBuzzer(); // Play buzzer when motion detected but user should stop
     }
   }
- 
-  delay(100); 
 }
+
 
 void playBuzzer() {
   analogWrite(WIO_BUZZER, 150); 
