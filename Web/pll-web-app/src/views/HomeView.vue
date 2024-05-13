@@ -1,8 +1,11 @@
 <template>
-    <div class="home">
-      <h1>Welcome to Pretty Little Lives (PLL)</h1>
-      <img alt="Vue logo" src="../../assets/images/Favicon.png" height="300" width="300">
-    </div>
+  <div class="picture_box">
+    <img alt="PLL logo" src="../../assets/images/pll.png" height="250" width="250">
+  </div>
+
+  <h1>Welcome to Pretty Little Lives (PLL)</h1>
+
+  <div class="background">
 
     <div class="container">
       <div class="box">
@@ -13,13 +16,26 @@
         <About/>
       </div>
     </div>
+
+    <div class="space"></div>
+
+    <div class="center">
+      <div class="box">
+        <Contact></Contact>
+      </div>
+    </div>
     
-    
-     
-    <Contact></Contact>
-  </template>
+    <div class="space"></div>
+
+  </div>
+
+  <div class="corporation">
+    <sub>© 2024 Pretty Little Lives, Inc.</sub>
+  </div>
+
+</template>
   
-  <script>
+<script>
   // @ is an alias to /src
 
   import InfoPLL from '@/components/InfoPLL.vue'
@@ -34,10 +50,17 @@
       Contact
     }
   }
-  </script>
+</script>
 
 
 <style scoped>
+
+  .picture_box{
+    width:auto;
+    height:250px;
+    background-color: #FFDE59;
+    position: center;
+  }
 
   .container{
     display: flex;
@@ -47,7 +70,23 @@
   .box{
     width: 500px;
     height: 200px;
-    /*background-color: greenyellow;*/
+    background-color: rgb(247, 247, 242);
+    border-radius: 20px;
   }
 
+  .center{
+    display: flex;
+    justify-content: center;
+  }
+
+  .space{
+    margin:30px;
+    width:auto;
+  }
+
+  .corporation{
+  color: black;
+  bottom: 0px;
+  background-color: #FFDE59; 
+  }
 </style>

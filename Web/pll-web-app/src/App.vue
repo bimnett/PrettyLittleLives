@@ -1,5 +1,6 @@
 <template>
   <div class="menu">
+    
     <nav>
       <router-link :to=" { name : 'home'}">Home</router-link> |
       <router-link :to=" { name : 'environment'}">Environment readings</router-link> |
@@ -10,11 +11,9 @@
   <!-- to make the content visable from the menu bar-->
   <div class="spaceing"></div>
 
-  <router-view class="view"></router-view>
+  <router-view ></router-view>
 
-  <div class="corporation">
-    <sub>© 2024 Pretty Little Lives, Inc.</sub>
-  </div>
+  
 </template>
 
 <script>
@@ -22,7 +21,7 @@
 </script>
 
 
-<style>
+<style scooped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -31,12 +30,18 @@
   color: #2c3e50;
 }
 
+.box_picture{
+  width: 60px;
+  height: 60px;
+}
+
 nav {
   padding: 30px;
-  background-color: #FFDE59;
+  background-color: white;
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
   width: 100%;
+  border-bottom: solid;
 }
 
 nav a {
@@ -49,19 +54,16 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #4b5e70;
-  background: white;
+  background: #FFDE59;
   text-decoration: underline;
 }
 
-
 .spaceing{
-  margin:90px;
+  margin:80px;
   width:auto;
 }
 
-.corporation{
-  color: black;
-  bottom: 0px;
-  background-color: #FFDE59;
-}
+
+
+
 </style>
