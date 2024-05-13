@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import EnvironmentView from '../views/EnvironmentView.vue'
+import DanceStopView from '../views/DanceStopView.vue'
+import SoundGameView from '../views/SoundGameView.vue'
+
 
 const routes = [
   {
@@ -12,6 +15,16 @@ const routes = [
     path: '/environment',
     name: 'environment',
     component: EnvironmentView
+  },
+  {
+    path: '/dancestop',
+    name: 'dancestop',
+    component: DanceStopView
+  }, 
+  {
+    path: '/soundgame',
+    name: 'soundgame',
+    component: SoundGameView
   }
 
 ]

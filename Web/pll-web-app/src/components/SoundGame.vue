@@ -170,14 +170,14 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    position: relative;
+    position: relative;    
     cursor: pointer;
   }
 
   /* image featuring the animal */
   .animal-image {
-    width: 100%;
-    height: 100%;
+    width: 75%;
+    height: 75%;
     margin: 5px;
     object-fit: cover;
     display: block;

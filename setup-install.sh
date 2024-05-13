@@ -39,3 +39,5 @@ cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app/
 
 npm install mqtt
 npm install
+npm install --save-dev @babel/plugin-transform-private-methods
+npm install vue-router@4

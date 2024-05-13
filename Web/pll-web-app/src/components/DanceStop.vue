@@ -5,13 +5,13 @@
     </div>
     <!-- different content is shown when clicking on button -->
     <div v-if="showDanceNow">
-        {{ dance }}
-       <img src="../../assets/dance.png"> 
+        Dance! <br>
+       <img src="../../assets/images/dance.png" height="300" width="300"> 
     </div>
 
     <div v-if="!showDanceNow"> 
-        {{ standStill }}
-        <img src="../../assets/stop.png">
+        Stand still <br>
+        <img src="../../assets/images/stop.png" height="300" width="300">
     </div>
 
     <!-- when the buttom is clicked the method toggleStartDance is executed -->
@@ -28,6 +28,9 @@
     import mqtt from "mqtt"; 
     import {HOST} from '@/credentials';
     const client=mqtt.connect(HOST);
+    let moveState;
+    const executeDance = 1;
+    const executeStill = 0
 
     export default {
         name : "DanceStop", 
