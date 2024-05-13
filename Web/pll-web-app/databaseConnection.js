@@ -1,119 +1,92 @@
+import express from 'express'; // Node.js web app framework to set up server
+import { MongoClient } from 'mongodb';
+import cors from 'cors'; // Cross-Origin Resource Sharing
+import dotenv from 'dotenv';
 import { uri } from './src/credentials.js';
 
-//MongoClient : to connect to MongoDB
-import { MongoClient} from 'mongodb';
+dotenv.config(); // Load environment variable (from .env to process.env)
 
-const client = new MongoClient(uri);
+const app = express();
+const port = process.env.PORT || 3000; // Default port is 3000
 
-// Connect to MongoDB cluster
-async function connectClient() {
-    // await - to block further execution until 
-    // this operation has completed 
-    try {
-        await client.connect();
-        await listDatabases(client);
-        console.log('Connected to MongoDB');
-    } catch (e){
-        cconsole.error('MongoDB connection failed:', e);
-    }
+// Declare global variables
+let client;
+let temperatureDb;
+let soundDb;
+
+async function connectToMongoDB() {
+  client = new MongoClient(uri);
+  try {
+    await client.connect();
+    temperatureDb = client.db('temperature');
+    soundDb = client.db('sound');
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+  }
 }
 
-// Close MongoDB connection
-async function closeClient() {
-    try {
-        if (client.isConnected()) {
-            await client.close();
-            console.log('MongoDB connection closed');
-        }
-    } catch (e) {
-        console.error('Failed to close MongoDB connection:', e);
-    }
-}
+connectToMongoDB();
 
-// List all databases
-async function listDatabases(client){
-    const databasesList = await client.db().admin().listDatabases();
+// CORS setup
+app.use(cors());
+app.use(express.json()); // Parse incoming JSON requests
 
-    console.log("Databases:" );
-    databasesList.databases.forEach(db => {
-        console.log(`- ${db.name}`);
-    })
-}
+// At API endpoint, receive temp data and save it to 'temp_values' collection in MongoDB
+app.post('/api/saveTemperature', async (req, res) => {
+  try {
+    const { temperature } = req.body;
+    const result = await temperatureDb.collection('temp_values').insertOne({ temperature, timestamp: new Date() });
+    res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to save temperature', error: err });
+  }
+});
 
-// Save temperature data
-export async function saveTemperature(temp) {
-    await connectClient();
-    try {
-        const db = client.db('temperature'); // 'temperature' database 
-        const collection = db.collection('temp_values'); // 'temp_values' collection
+// Retrieve top 10 temperature readings for current day
+app.get('/api/topTemperatureReadings', async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const readings = await temperatureDb.collection('temp_values')
+                                        .find({ timestamp: { $gte: today } })
+                                        .sort({ temperature: -1 })
+                                        .limit(10)
+                                        .toArray();
+    res.status(200).json(readings);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve top temperature readings', error: err });
+  }
+});
 
-        // Insert temperature reading
-        await collection.insertOne({ temperature: temp, timestamp: new Date() });
+// At API endpoint, receive sound level data and save it to 'decibel_values' collection in MongoDB
+app.post('/api/saveSoundLevel', async (req, res) => {
+  try {
+    const { soundLevel } = req.body;
+    const result = await soundDb.collection('decibel_values').insertOne({ soundLevel, timestamp: new Date() });
+    res.status(200).json({ message: 'Sound level saved', id: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to save sound level', error: err });
+  }
+});
 
-    } catch (e) {
-        console.error("Failed to save temperature data:", e);
-    } finally {
-        await closeClient();
-    }
-}
+// Retrieve top 10 sound level readings for current day
+app.get('/api/topSoundReadings', async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const readings = await soundDb.collection('decibel_values')
+                                  .find({ timestamp: { $gte: today } })
+                                  .sort({ soundLevel: -1 })
+                                  .limit(10)
+                                  .toArray();
+    res.status(200).json(readings);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to retrieve top sound level readings', error: err });
+  }
+});
 
-// Returns array of top 10 highest temperature readings of the day
-export async function getTopTempReadings() {
-    await connectClient();
-    try {
-        const db = client.db('temperature');
-        const collection = db.collection('temp_values');
-
-        // Query for top 10 highest temperature readings of the day
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set time to midnight to retrieve 10 highest readings before current time
-        const readings = await collection.find({ timestamp: { $gte: today } })
-                                          .sort({ temperature: -1 }) // highest temperatures appear first
-                                          .limit(10)
-                                          .toArray();
-        return readings;
-    } catch (e) {
-        console.error("Failed to retrieve top readings:", e);
-    } finally {
-        await closeClient();
-    }
-}
-
-// Save sound level data
-export async function saveSoundLevel(soundLevel) {
-    await connectClient();
-    try {
-        const db = client.db('sound');
-        const collection = db.collection('decibel_values');
-
-        // Insert temperature reading
-        await collection.insertOne({ soundLevel: soundLevel, timestamp: new Date() });
-
-    } catch (e) {
-        console.error("Failed to save sound level data:", e);
-    } finally {
-        await closeClient();
-    }
-}
-
-// Returns array of top 10 highest sound level readings of the day
-export async function getTopSoundReadings() {
-    await connectClient();
-    try {
-        const db = client.db('sound');
-        const collection = db.collection('decibel_values');
-
-        // Query for top 10 highest sound readings of the day
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); // Set time to midnight to retrieve 10 highest readings before current time
-        const readings = await collection.find({ timestamp: { $gte: today } })
-                                          .sort({ soundLevel: -1 }) // highest sound levels appear first
-                                          .limit(10)
-                                          .toArray();
-        return readings;
-    } catch (e) {
-        console.error("Failed to retrieve top sound level readings:", e);
-    } finally {
-        await closeClient();
-    }
-}
+// Start server
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
