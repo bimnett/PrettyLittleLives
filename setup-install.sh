@@ -40,7 +40,7 @@ cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app/
 npm install mqtt
 
 # Install netlify for web app deployment
-npm install netlify -g
+npm install netlify-cli -g
 export PATH=$PATH:/root/bin
 
 npm install
