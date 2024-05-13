@@ -3,8 +3,19 @@
       <h1>Welcome to Pretty Little Lives (PLL)</h1>
       <img alt="Vue logo" src="../../assets/images/Favicon.png" height="300" width="300">
     </div>
-    <InfoPLL></InfoPLL>
-    <About></About>  
+
+    <div class="container">
+      <div class="box">
+        <InfoPLL/>
+      </div>
+
+      <div class="box">
+        <About/>
+      </div>
+    </div>
+    
+    
+     
     <Contact></Contact>
   </template>
   
@@ -27,5 +38,16 @@
 
 
 <style scoped>
+
+  .container{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .box{
+    width: 500px;
+    height: 200px;
+    /*background-color: greenyellow;*/
+  }
 
 </style>

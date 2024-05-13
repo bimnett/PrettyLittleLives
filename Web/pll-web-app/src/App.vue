@@ -7,10 +7,12 @@
       <router-link :to="{ name : 'soundgame'}">SoundGame</router-link>
     </nav>
   </div>
-  <router-view/>
+  <!-- to make the content visable from the menu bar-->
+  <div class="spaceing"></div>
+
+  <router-view class="view"></router-view>
 
   <div class="corporation">
-    <br> 
     <sub>© 2024 Pretty Little Lives, Inc.</sub>
   </div>
 </template>
@@ -31,6 +33,10 @@
 
 nav {
   padding: 30px;
+  background-color: #FFDE59;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%;
 }
 
 nav a {
@@ -43,17 +49,19 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #4b5e70;
-  background: #FFDE59;
+  background: white;
   text-decoration: underline;
 }
 
-menu{
-  position: fixed;
-  top:0px;
+
+.spaceing{
+  margin:90px;
+  width:auto;
 }
 
-corporation{
+.corporation{
   color: black;
   bottom: 0px;
+  background-color: #FFDE59;
 }
 </style>
