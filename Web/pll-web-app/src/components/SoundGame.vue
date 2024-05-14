@@ -9,7 +9,7 @@
     <div class="images-grid">
         <div class="image-box" v-for="(animal, index) in displayedAnimals" :key="animal.name" @click="checkAnswer(animal)">
           <img :src="animal.image" :alt="animal.name" class="animal-image">
-          <p class="animal-name">{{ animal.name }}</p>
+          <div class="animal-name">{{ animal.name }}</div>
         </div>
     </div>
   </div>
@@ -110,14 +110,15 @@
 
 </script>
 
-<style>
+<style scoped>
   .game-container {
     margin: auto;
     justify-content: left;
     text-align: center;
     background-color: #FCF3CF;
     min-width: 90vh;
-    height: auto;
+    width:auto;
+    height: 650px;
     padding: 0;
   }
 
@@ -132,23 +133,22 @@
     line-height: 1.8;
     margin: 0;
     color: #7D6608;
-    font-family:'Impact';   
+    /* here change the style to pompire 
+    font-family:'Pompiere';   */
     text-align: center; 
   }
 
-
   .control-button {
-    background-color: #B7950B;
+    background-color: #FFDE59;
     border: none;
-    color: white;
-    margin: 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.5rem;
+    color: #2c3e50;
     padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
-  }
+    border-radius: 20px;
+    }
 
   .control-button:hover{
      background: #7D6608;
@@ -157,11 +157,12 @@
   /* 4x4 grid that contains the same component image-box */
   .images-grid {
     display: grid;
+    
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; 
     width: 100%;
-    height: auto;
-    gap: 0px;
+    height: 550px;
+    grid-row-gap: 5px;
   }
 
   /* component that contains both animal-image and animal-name */
@@ -170,15 +171,15 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    position: relative;
+    height: 300px;
     cursor: pointer;
   }
 
   /* image featuring the animal */
   .animal-image {
-    width: 100%;
-    height: 100%;
-    margin: 5px;
+    width: 350px;
+    height: 200px;
+    margin: 1px;
     object-fit: cover;
     display: block;
     overflow: hidden; /* hides parts of the animal image if it's over image-box's dimensions */
@@ -186,9 +187,14 @@
 
   /* text containing the animal name, shows below animal-image */
   .animal-name {
-    font-size: 2rem;
+    font-size: 30px;
     color: black;
     font-family:'Comic Sans MS';
+  }
+
+  .space{
+    margin:10px;
+    width:auto;
   }
 
 </style>

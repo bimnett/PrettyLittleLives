@@ -1,4 +1,5 @@
 <template>
+    <h2>Temperature</h2>
     <div>Current temperature : {{ temp }} celsius</div>
 </template>
 
@@ -14,7 +15,7 @@
         data() {
             return {
                 // instantiate the placeholder 
-                temp : "nothing",
+                temp : "-",
             };
         },
 

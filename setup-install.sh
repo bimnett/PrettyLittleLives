@@ -44,3 +44,5 @@ npm install netlify-cli -g
 export PATH=$PATH:/root/bin
 
 npm install
+npm install --save-dev @babel/plugin-transform-private-methods
+npm install vue-router@4
