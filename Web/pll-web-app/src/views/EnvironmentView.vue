@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  /* impoerting the components to this view */
+  /* importing the components to this view */
   import Temperature from '../components/Temperature.vue'
   import DecibelLevel from '../components/DecibelLevel.vue'
 

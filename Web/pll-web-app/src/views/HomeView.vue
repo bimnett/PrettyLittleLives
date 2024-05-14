@@ -1,15 +1,9 @@
 <template>
-
-  <div>
-
-  </div>
-
   <div class="picture_box">
     <img alt="PLL logo" src="../../assets/images/pll.png" height="250" width="250">
   </div>
 
   <h1>Welcome to Pretty Little Lives (PLL)</h1>
-
 
   <div class="container">
     <div class="box">
