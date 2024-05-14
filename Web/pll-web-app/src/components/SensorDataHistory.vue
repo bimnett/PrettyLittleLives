@@ -2,7 +2,6 @@
     <div class="sensor-data-history">
         <h2>Top 10 Highest Temperature Readings Today</h2>
         <ul class="readings">
-            <!-- reading._id is reading's unique identifier from database -->
             <li v-for="reading in topTempReadings" :key="reading._id">
                 {{ reading.temperature }} °C at {{ new Date(reading.timestamp).toLocaleTimeString() }}
             </li>
@@ -18,7 +17,7 @@
 </template>
 
 <script>
-    import { getTopTempReadings, getTopSoundReadings } from "../../databaseConnection";
+    import axios from "axios";
 
     export default {
         name: "SensorDataHistory",
@@ -31,15 +30,39 @@
         },
 
         async mounted() {
-            this.topTempReadings = await getTopTempReadings();
-            this.topSoundReadings = await getTopSoundReadings();
+            this.topTempReadings = await this.getTopTempReadings();
+            this.topSoundReadings = await this.getTopSoundReadings();
+        },
+
+        methods: {
+            // Function to make HTTP GET request to retrieve top temperature readings
+            async getTopTempReadings() {
+                try {
+                    const response = await axios.get('http://localhost:3000/api/topTemperatureReadings');
+                    return response.data;
+                } catch (error) {
+                    console.error('Failed to get top temperature readings:', error);
+                    return [];
+                }
+            },
+
+            // Function to make HTTP GET request to retrieve top sound level readings
+            async getTopSoundReadings() {
+                try {
+                    const response = await axios.get('http://localhost:3000/api/topSoundReadings');
+                    return response.data;
+                } catch (error) {
+                    console.error('Failed to get top sound level readings:', error);
+                    return [];
+                }
+            }
         }
     };
 </script>
 
 <style>
 .sensor-data-history {
-    font-family:'Comic Sans MS';
+    font-family: 'Comic Sans MS';
     padding: 20px;
     max-width: 600px;
     margin: auto;

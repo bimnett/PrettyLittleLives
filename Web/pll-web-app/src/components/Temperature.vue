@@ -39,9 +39,13 @@
           console.error('Failed to save temperature:', error);
         }
       });
+        // test methods without connecting to mqtt
+        // await this.saveTemperature("0");
+        // console.log(`Temperature saved to MongoDB`);
     },
   
     methods: {
+    // Function to send HTTP post request to express server "http://localhost:3000/api/saveTemperature"
       async saveTemperature(temp) {
         try {
           await axios.post("http://localhost:3000/api/saveTemperature", { temperature: temp });
