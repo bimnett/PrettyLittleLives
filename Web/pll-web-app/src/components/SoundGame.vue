@@ -110,7 +110,7 @@
 
 </script>
 
-<style>
+<style scoped>
   .game-container {
     margin: auto;
     justify-content: left;

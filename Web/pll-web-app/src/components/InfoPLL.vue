@@ -18,7 +18,7 @@
     }
 </script>
   
-<style>
+<style scoped>
     .bodytext{
         text-align: 10px;
     }

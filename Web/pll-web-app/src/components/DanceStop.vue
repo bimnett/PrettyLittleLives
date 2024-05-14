@@ -1,21 +1,23 @@
 <template>
-    <h2> Lest play DanceStop </h2>
-    <div>
-        
-    </div>
+
+    <h2> <br>Lest play DanceStop </h2>
+    
+    <div class="space"></div>
+
     <!-- different content is shown when clicking on button -->
     <div v-if="showDanceNow">
-        Dance! <br>
-       <img src="../../assets/images/dance.png" height="300" width="300"> 
+        <h2>Dance!<br></h2> <br>
+       <img src="../../assets/images/dance.png" height="400" width="400"> 
     </div>
 
     <div v-if="!showDanceNow"> 
-        Stand still <br>
-        <img src="../../assets/images/stop.png" height="300" width="300">
+        <h2>Stand still</h2> <br>
+        <img src="../../assets/images/stop.png" height="400" width="400">
     </div>
 
-    <!-- when the buttom is clicked the method toggleStartDance is executed -->
-    <button @click="[toggleStartDance(), sendDanceState(ShowDanceNow)]">
+    <!-- when the buttom is clicked the method 
+        toggleStartDance & sendDanceState are executed -->
+    <button class="button" @click="[toggleStartDance(), sendDanceState(ShowDanceNow)]">
         <!-- different names gets displayed on button -->
         <span v-if="showDanceNow">Start dance</span>
         <span v-if="!showDanceNow">Stop</span>
@@ -95,3 +97,22 @@
     } 
 
 </script>
+
+<style scoped>
+    .button {
+    background-color: #FFDE59;
+    border: none;
+    color: #2c3e50;
+    padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+    }
+
+    .space{
+    margin:40px;
+    width:auto;
+    }
+</style>

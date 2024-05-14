@@ -1,6 +1,6 @@
 <template>
     <h2>Tempareture</h2>
-    <div class="Temperature">Current temperature : {{ temp }} celsius</div>
+    <div>Current temperature : {{ temp }} celsius</div>
 </template>
 
 <script>
@@ -15,7 +15,7 @@
         data() {
             return {
                 // instantiate the placeholder 
-                temp : "nothing",
+                temp : "-",
             };
         },
 

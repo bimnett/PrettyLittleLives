@@ -12,7 +12,7 @@
 
     data() {
       return {
-        soundLevel: 'null', 
+        soundLevel: '-', 
       };
     },
 
@@ -45,4 +45,4 @@
 
   </script>
   
-  <style></style>
+  <style scoped></style>
