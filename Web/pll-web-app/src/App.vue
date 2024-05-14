@@ -37,6 +37,7 @@
   height: 60px;
 }
 
+/* This style will apply to all <nav> tags */
 nav {
   padding: 30px;
   background-color: white;
@@ -46,6 +47,7 @@ nav {
   border-bottom: solid;
 }
 
+/* This style will apply to all <nav> tags and all other tags inside of this*/
 nav a {
   font-weight: bold;
   color: #2c3e50;
@@ -54,6 +56,8 @@ nav a {
   text-decoration: none; 
 }
 
+/* it applies to all <router-link> tags indide of a <nav> tag*/
+  /* extract-active will show to user on which option in menu bar that is active*/
 nav a.router-link-exact-active {
   color: #4b5e70;
   background: #FFDE59;
