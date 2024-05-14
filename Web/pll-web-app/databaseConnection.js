@@ -37,15 +37,15 @@ app.use(express.json()); // Parse incoming JSON requests
 // At API endpoint, receive temp data and save it to 'temp_values' collection in MongoDB
 app.post('/api/saveTemperature', async (req, res) => {
     try {
-      const { temperature } = req.body;
-      const temperatureFloat = parseFloat(temperature); // Convert temperature to float. Note: float and double same type in js
+      const { temperatureValue } = req.body;
+      const temperatureFloat = parseFloat(temperatureValue); // Convert temperature to float. Note: float and double same type in js
       
       if (isNaN(temperatureFloat)) {
         // If temperatureFloat is not a valid number, return error
         return res.status(400).json({ message: 'Invalid temperature value' });
       }
   
-      const result = await temperatureDb.collection('temp_values').insertOne({ temperatureFloat, timestamp: new Date() });
+      const result = await temperatureDb.collection('temp_values').insertOne({ temperature: temperatureFloat, timestamp: new Date() });
       res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
     } catch (err) {
       res.status(500).json({ message: 'Failed to save temperature', error: err });
@@ -72,8 +72,8 @@ app.get('/api/topTemperatureReadings', async (req, res) => {
 // At API endpoint, receive sound level data and save it to 'decibel_values' collection in MongoDB
 app.post('/api/saveSoundLevel', async (req, res) => {
     try {
-      const { soundLevel } = req.body;
-      const soundLevelFloat = parseFloat(soundLevel); // Convert sound level to float
+      const { soundLevelValue } = req.body;
+      const soundLevelFloat = parseFloat(soundLevelValue); // Convert sound level to float
       
       if (isNaN(soundLevelFloat)) {
         // If soundLevelFloat is not a valid number, return error

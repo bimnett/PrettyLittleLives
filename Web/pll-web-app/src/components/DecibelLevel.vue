@@ -44,15 +44,15 @@ export default {
       }
     });
     // test methods without connecting to mqtt
-    // await this.saveSoundLevel("0");
+    // await this.saveSoundLevel("999");
     // console.log(`Sound Level saved to MongoDB`);
   },
   
   methods: {
     // Function to send HTTP post request to express server "http://localhost:3000/api/saveSoundLevel"
-    async saveSoundLevel(soundLevel) {
+    async saveSoundLevel(soundLevelValue) {
       try {
-        await axios.post("http://localhost:3000/api/saveSoundLevel", { soundLevel: soundLevel });
+        await axios.post("http://localhost:3000/api/saveSoundLevel", { soundLevel: soundLevelValue });
       } catch (error) {
         console.error("Failed to save sound level:", error);
       }
