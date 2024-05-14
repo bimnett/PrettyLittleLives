@@ -1,5 +1,5 @@
 <template>
-    <h2>Tempareture</h2>
+    <h2>Temperature</h2>
     <div>Current temperature : {{ temp }} celsius</div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
 
-    <h2> <br>Lest play DanceStop </h2>
+    <h2> <br>Let's play DanceStop </h2>
     
     <div class="space"></div>
 
