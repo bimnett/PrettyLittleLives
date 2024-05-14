@@ -1,3 +1,5 @@
+// backend
+
 import express from 'express'; // Node.js web app framework to set up server
 import { MongoClient } from 'mongodb';
 import cors from 'cors'; // Cross-Origin Resource Sharing
@@ -34,16 +36,24 @@ app.use(express.json()); // Parse incoming JSON requests
 
 // At API endpoint, receive temp data and save it to 'temp_values' collection in MongoDB
 app.post('/api/saveTemperature', async (req, res) => {
-  try {
-    const { temperature } = req.body;
-    const result = await temperatureDb.collection('temp_values').insertOne({ temperature, timestamp: new Date() });
-    res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to save temperature', error: err });
-  }
-});
+    try {
+      const { temperature } = req.body;
+      const temperatureFloat = parseFloat(temperature); // Convert temperature to float. Note: float and double same type in js
+      
+      if (isNaN(temperatureFloat)) {
+        // If temperatureFloat is not a valid number, return error
+        return res.status(400).json({ message: 'Invalid temperature value' });
+      }
+  
+      const result = await temperatureDb.collection('temp_values').insertOne({ temperatureFloat, timestamp: new Date() });
+      res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to save temperature', error: err });
+    }
+  });
+  
 
-// Retrieve top 10 temperature readings for current day
+// At API endpoint, retrieve top 10 temperature readings for current day
 app.get('/api/topTemperatureReadings', async (req, res) => {
   try {
     const today = new Date();
@@ -61,16 +71,23 @@ app.get('/api/topTemperatureReadings', async (req, res) => {
 
 // At API endpoint, receive sound level data and save it to 'decibel_values' collection in MongoDB
 app.post('/api/saveSoundLevel', async (req, res) => {
-  try {
-    const { soundLevel } = req.body;
-    const result = await soundDb.collection('decibel_values').insertOne({ soundLevel, timestamp: new Date() });
-    res.status(200).json({ message: 'Sound level saved', id: result.insertedId });
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to save sound level', error: err });
-  }
-});
+    try {
+      const { soundLevel } = req.body;
+      const soundLevelFloat = parseFloat(soundLevel); // Convert sound level to float
+      
+      if (isNaN(soundLevelFloat)) {
+        // If soundLevelFloat is not a valid number, return error
+        return res.status(400).json({ message: 'Invalid sound level value' });
+      }
+  
+      const result = await soundDb.collection('decibel_values').insertOne({ soundLevelFloat, timestamp: new Date() });
+      res.status(200).json({ message: 'Sound level saved', id: result.insertedId });
+    } catch (err) {
+      res.status(500).json({ message: 'Failed to save sound level', error: err });
+    }
+  });
 
-// Retrieve top 10 sound level readings for current day
+// At API endpoint, retrieve top 10 sound level readings for current day
 app.get('/api/topSoundReadings', async (req, res) => {
   try {
     const today = new Date();
