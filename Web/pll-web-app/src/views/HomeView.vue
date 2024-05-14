@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    
+
   </div>
 
   <div class="picture_box">
@@ -31,12 +31,6 @@
   
   <div class="space"></div>
 
-  
-
-  <div class="corporation">
-    <sub>© 2024 Pretty Little Lives, Inc.</sub>
-  </div>
-
 </template>
   
 <script>
@@ -57,40 +51,4 @@
 </script>
 
 
-<style scoped>
-
-  .picture_box{
-    width:auto;
-    height:250px;
-    background-color: #FFDE59;
-    position: center;
-  }
-
-  .container{
-    display: flex;
-    justify-content: space-evenly;
-  }
-
-  .box{
-    width: 500px;
-    height: 200px;
-    background-color: rgb(247, 247, 242);
-    border-radius: 20px;
-  }
-
-  .center{
-    display: flex;
-    justify-content: center;
-  }
-
-  .space{
-    margin:30px;
-    width:auto;
-  }
-
-  .corporation{
-  color: black;
-  bottom: 0px;
-  background-color: #FFDE59; 
-  }
-</style>
+<style scoped src="../../assets/css/HomeView.css"/>

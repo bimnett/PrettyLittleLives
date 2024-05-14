@@ -13,7 +13,9 @@
 
   <router-view ></router-view>
 
-  
+  <div class="corporation">
+    <sub>© 2024 Pretty Little Lives, Inc.</sub>
+  </div>
 </template>
 
 <script>
@@ -62,6 +64,13 @@ nav a.router-link-exact-active {
   margin:80px;
   width:auto;
 }
+
+.corporation{
+  color: black;
+  bottom: 0px;
+  background-color: #FFDE59; 
+}
+
 
 
 

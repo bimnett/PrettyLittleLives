@@ -19,6 +19,7 @@
         <!-- insert the custom-made tag for decibelHistory-->
     </div>
   </div>
+  <div class="space"></div>
 </template>
 
 <script>
@@ -39,29 +40,5 @@
   }
 </script>
 
-<style scoped>
-  .container{
-    display: flex;
-    justify-content: space-evenly;
-  }
-
-  .box{
-    width: 500px;
-    height: 200px;
-    background-color: rgb(247, 247, 242);
-    border-radius: 20px;
-  }
-
-  .box_history{
-    width: 500px;
-    height: 600px;
-    background-color: rgb(247, 247, 242);
-    border-radius: 20px;  
-  }
-
-  .space{
-    margin:50px;
-    width:auto;
-  }
-
-</style>
+<style scoped src="../../assets/css/EnvironmentView.css"/>
+  

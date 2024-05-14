@@ -76,7 +76,7 @@
             // Subscribe to the MQTT topic
             client.on("connect", () => {
                 // subscribing to the dancestop topic 
-            client.subscribe("pll/game/dancestop");
+            client.subscribe("pll/game/dancestop/state");
             });
 
             // When connection failed
@@ -98,21 +98,4 @@
 
 </script>
 
-<style scoped>
-    .button {
-    background-color: #FFDE59;
-    border: none;
-    color: #2c3e50;
-    padding: 15px 32px;
-    text-align: center;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 20px;
-    }
-
-    .space{
-    margin:40px;
-    width:auto;
-    }
-</style>
+<style scoped src="../../assets/css/DanceStop.css"/>
