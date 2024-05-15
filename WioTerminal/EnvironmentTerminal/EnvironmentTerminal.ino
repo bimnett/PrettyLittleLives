@@ -21,8 +21,8 @@ PubSubClient mqttClient;
 // To be able to read the analog readings with the
 // temperature and humidity sensor throug the pin A0
 // DHT11 is the sensor temperature and humidity sensor 
-DHT dht(A0, DHT11);   
-Grove_LED_Bar bar(A1, A0, 1);  // Clock pin, Data pin, Orientation
+DHT dht(D2, DHT11);   
+Grove_LED_Bar bar(D6, D8, 1);  // Clock pin, Data pin, Orientation
 
 const int sampleWindow = 50; // Time frame where millis function will run. 
 unsigned int soundSample; // sound samples collected within the sampleWindow
