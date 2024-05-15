@@ -58,6 +58,7 @@ void setup() {
   if (!motion) { 
     Serial.println("Error"); 
     changeScreenColor(TFT_YELLOW, "Dance Stop not available!");
+    delay(1000); 
   }
   motion.setOutputDataRate(LIS3DHTR_DATARATE_25HZ); 
   motion.setFullScaleRange(LIS3DHTR_RANGE_2G); 
