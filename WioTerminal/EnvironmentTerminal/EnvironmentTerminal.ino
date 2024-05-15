@@ -28,8 +28,8 @@ const int sampleWindow = 50; // Time frame where millis function will run.
 unsigned int soundSample; // sound samples collected within the sampleWindow
 unsigned long startMillis = millis();   
 float peakToPeak = 0; 
-unsigned int signalMax = 0; 
-unsigned int signalMin = 1023; 
+unsigned int signalMin = 0; 
+unsigned int signalMax = 1023; 
 
 // Lower and upper decibel bound for melody player
 const int lowerBound = 50;
@@ -79,33 +79,15 @@ void loop() {
   delay(1000);
 
 
+  soundSample = analogRead(0); // read analog input from the loudness sensor 
 
-
-// This function makes sure the sound sample is within the valid range and makes sure that the sound sample is always positive values. 
-  while (millis() - startMillis < sampleWindow){ 
-    soundSample = analogRead(0); // read analog input from the loudness sensor 
-    if(soundSample < 1023){ 
-      if(soundSample > signalMax){
-        signalMax = soundSample; 
-      }
-      else if (soundSample < signalMin){
-        signalMin = soundSample; 
-      }
-    }
-  }
-  // peakToPeak is a measure of difference between the maximum peak and the minimum peak of a soundwave. 
-  peakToPeak = signalMax - signalMin; 
   
   // Mapping from anlog to decibel
-  float db = map (peakToPeak, 20, 900, 49.5, 90); 
+  float db = map (soundSample, signalMin, signalMax, 0, 100); 
 
   // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db.
   // Play "The wheels on the bus go round and round" if it exceeds 60db.
-  if(db >= lowerBound && db <= upperBound) {
-    mary.playSong();
-  }else if(db > upperBound){
-    WheelsOnTheBus.playSong();
-  }
+  
   setLedbar(db); // Light upp the ledbar, according to the decibel value.
 
   // convert to char* to then send it to the mqtt broker
