@@ -1,4 +1,3 @@
-
 #include "TFT_eSPI.h"
 #include "rpcWiFi.h"
 #include <PubSubClient.h>
@@ -6,21 +5,16 @@
 #include "connectionCredentials.h"
 #include <LIS3DHTR.h> // Library for built-in accelerometer 
 
-
 // Declare tft object for manipulating the wio terminal screen.
 TFT_eSPI tft;
 LIS3DHTR <TwoWire> motion; // Uses the TwoWire interface 
-
-
 
 // Declare necessary variables for MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 bool isDancing = false;
 
-
 void setup() {
-
   Serial.begin(115200);
 
   // Initializes the 5-way joystick on the terminal
@@ -35,7 +29,6 @@ void setup() {
   pinMode(WIO_BUZZER, OUTPUT);
   motion.begin(Wire1); // Wire1 is part of the TwoWire interface
 
-
   // Initializes the tft object and the initial background
   setTextSettings();
 
@@ -48,83 +41,65 @@ void setup() {
   mqttClient.subscribe("pll/game-terminal/sound-game/check-answer");
   mqttClient.subscribe("pll/game/dancestop/state");
 
-   // Checks if the built-in accelerometer sensor is initialised, if not prints an error message and halts the rest of the program.  
+  // Checks if the built-in accelerometer sensor is initialised, if not prints an error message in terminal and alerts the player on LCD screen.
   if (!motion) { 
     Serial.println("Error"); 
-    while (1);
+    changeScreenColor(TFT_YELLOW, "Dance Stop not available!");
   }
   motion.setOutputDataRate(LIS3DHTR_DATARATE_25HZ); 
   motion.setFullScaleRange(LIS3DHTR_RANGE_2G); 
-
 }
 
 void loop() {
-
   // Re-establish connection if any is lost
-  if(!WiFi.isConnected()) {
+  if (!WiFi.isConnected()) {
     connectToWiFi();
   }
-  if(!mqttClient.loop()) {
+  if (!mqttClient.loop()) {
     connectToMQTTBroker();
   }
-  
 
   // Track user input for the sound game
   replaySound();
   handleJoystickInput();
   detectMotion(); 
-
 }
-
 
 // Display text on the center of the screen.
 void displayText(char* text) {
-
   tft.fillScreen(0x0000);
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
 
-
 void connectToWiFi() {
-
   // Attempt to connect to the WiFi network until a connection is established
-  while(!WiFi.isConnected()) {
-
+  while (!WiFi.isConnected()) {
     displayText("Connecting to WiFi..");
     WiFi.begin(SSID, WIFI_PASSWORD);
     delay(3000);
   }
-
   // Print confirmation
   displayText("Connected!");
 }
 
-
 void connectToMQTTBroker() {
-
   // Configure pubsub client with property setters
-  while(!mqttClient.connected()) {
-
+  while (!mqttClient.connected()) {
     // Ensure that WiFi is connected before proceeding
-    if(!WiFi.isConnected()) {
+    if (!WiFi.isConnected()) {
       connectToWiFi();
     }
-
     displayText("Connecting to MQTT..");
-
     mqttClient.setClient(wifiClient);
     mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
-
     // If mqtt connection is successful, break from loop.
-    if(mqttClient.connect(MQTT_CLIENT_ID)) {
+    if (mqttClient.connect(MQTT_CLIENT_ID)) {
       break;
     }
-    
-    if(!mqttClient.connected()) {
+    if (!mqttClient.connected()) {
       delay(3000);
     }
   }
-
   mqttClient.setCallback(callback);
   displayText("MQTT connected!");
   delay(1000);
@@ -138,27 +113,31 @@ void detectMotion() {
   // Calculate total acceleration magnitude
   float totalAcceleration = sqrt((yValues * yValues) + (zValues * zValues) + (xValues * xValues)); 
 
-  float motionThreshold = 1.04; 
+  float motionThreshold = 1.05; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
   
   if (isDancing) {
-    tft.fillScreen(TFT_GREEN); // Change screen color to green
-    if (totalAcceleration > motionThreshold) {
-      Serial.println("Motion detected - Keep dancing"); 
-    } else {
-      Serial.println("No motion detected - Dance!"); 
-      playBuzzer(); // Play buzzer when no motion detected but user should keep dancing
+    changeScreenColor(TFT_GREEN, "GO!"); // Change screen color to green and adds GO message on LCD screen 
+    if (totalAcceleration < motionThreshold) {
+      changeScreenColor(TFT_GREEN, "Keep on dancing!");
+      playBuzzer();
     }
   } else {
-    tft.fillScreen(TFT_RED); // Change screen color to red
-    if (totalAcceleration < motionThreshold) {
-      Serial.println(" No motion detected"); 
-    } else {
-      Serial.println("Motion detected - Stop!");
-      playBuzzer(); // Play buzzer when motion detected but user should stop
+    changeScreenColor(TFT_RED, "STOP!"); // Change screen color to red and adds stop message on LCD screen 
+    if (totalAcceleration > motionThreshold) {
+      changeScreenColor(TFT_RED, "Stop dancing!");
+      playBuzzer(); 
     }
-  }
     delay(100); 
+  }
+}
 
+void changeScreenColor(uint16_t color, const char* text){
+  tft.fillScreen(color);
+  // Display text on screen 
+  tft.setTextSize(3);
+  tft.setTextColor(TFT_WHITE);
+  tft.setTextDatum(MC_DATUM);
+  tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
 
 void playBuzzer() {
@@ -168,61 +147,46 @@ void playBuzzer() {
   delay(1000); 
 }
 
-
 // Retrieves mqtt subscription message.
 // Is automatically called when a message is received.
 // Checks the topic to decide if it is's related to sound game or danceStop game 
 void callback(char* topic, byte* payload, unsigned int length) {
-  
-  if((strcmp(topic, "pll/game-terminal/sound-game/options") == 0 ||
-      strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0)){
-        char message[length];
-        for(int i = 0; i < length; i++) {
-        message[i] = payload[i];
-        }
-      handleSubMessage(message, topic);
-
-    } else {
-      // Convert byte payload of the message to a character array.
-      int message = atoi((char*)payload);
-      // Check message content and change the state accordingly
-      if (message == 1) {
-        isDancing = true;
-      } else if (message == 0) {
-        isDancing = false;
-      }
+  if ((strcmp(topic, "pll/game-terminal/sound-game/options") == 0 || strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0)) {
+    char message[length];
+    for (int i = 0; i < length; i++) {
+      message[i] = payload[i];
     }
+    handleSubMessage(message, topic);
+  } else {
+    // Convert byte payload of the message to a character array.
+    int message = atoi((char*)payload);
+    // Check message content and change the state accordingly
+    if (message == 1) {
+      isDancing = true;
+    } else if (message == 0) {
+      isDancing = false;
+    }
+  }
 }
 
 // Handler that triggers different actions depending on topic and subscription message. 
 void handleSubMessage(char message[], const char* topic) {
-
   // Start new instance of the sound game
-  if(strcmp(topic, "pll/game-terminal/sound-game/options") == 0) {
-
+  if (strcmp(topic, "pll/game-terminal/sound-game/options") == 0) {
     // Set the different option values
     parseSoundGameOptions(message);
-
     // Start the game
     startSoundGame();
   }
-
-
   // Display result of the user's answer for the sound game
-  else if(strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
-
-    if(strcmp("correct", message) == 0) {
-
+  else if (strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
+    if (strcmp("correct", message) == 0) {
       displayCorrect();
-    } 
-    
-    else {
-
+    } else {
       displayIncorrect();
     }
   }
 }
-
 
 // Set text settings and background.
 void setTextSettings() {
@@ -513,4 +477,3 @@ void startSoundGame() {
 
 
 /************************************************ END OF SOUND GAME ***************************************************************/
-

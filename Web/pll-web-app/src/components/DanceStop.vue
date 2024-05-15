@@ -6,35 +6,32 @@
 
     <!-- different content is shown when clicking on button -->
     <div v-if="showDanceNow">
-        <h2>Dance!<br></h2> <br>
-       <img src="../../assets/images/dance.png" height="400" width="400"> 
+        <h2>{{ dance }}<br></h2>
+        <img src="../../assets/images/dance.png" alt="Dancing stick figure" height="400" width="400"> 
     </div>
 
-    <div v-if="!showDanceNow"> 
-        <h2>Stand still</h2> <br>
-        <img src="../../assets/images/stop.png" height="400" width="400">
+    <div v-else> 
+        <h2>{{ standStill }}</h2> <br>
+        <img src="../../assets/images/stop.png" alt="Stop sign" height="400" width="400">
     </div>
-
 
     <!-- when the buttom is clicked the method 
         toggleStartDance & sendDanceState are executed -->
-    <button class="button" @click="[toggleStartDance(), sendDanceState(ShowDanceNow)]">
+    <button class="button" @click="toggleStartDance">
         <!-- different names gets displayed on button -->
-        <span v-if="showDanceNow">Start dance</span>
-        <span v-if="!showDanceNow">Stop</span>
-    <!-- when the buttom is clicked the method toggleStartDance is executed -->
-    <button @click="toggleStartDance">
-        <!-- different button-titles gets displayed on button -->
         <span v-if="showDanceNow">Stop</span>
         <span v-else>Start dance</span>
     </button>
-    </div>
+    
 </template>
 
 <script> 
     import mqtt from "mqtt"; 
-    import {HOST} from '@/credentials';
-
+    import { HOST } from '@/credentials';
+    let client = mqtt.connect(HOST);
+    //let moveState;
+    //const executeDance = 1;
+    //const executeStill = 0;
 
     export default {
         name : "DanceStop", 
@@ -42,42 +39,44 @@
         data() {
             
             return {
-                showDanceNow : false,
-                executeDance : 1,
-                executeStill : 0,
-                dance : "Dance now!",
-                standStill : "Stand still!"
+                showDanceNow: false,
+                executeDance: 1,
+                executeStill: 0,
+                dance: "Dance now!",
+                standStill: "Stand still!"
             };  
         }, 
 
-        methods:{
-            // change so it shitfs between dance and stop on webpage
+        methods: {
+            // change so it shifts between dance and stop on webpage
             toggleStartDance() {
                 this.showDanceNow = !this.showDanceNow;
-                this.sendDanceState(this.showDanceNow); // Sends MQTT message about the dance state. If its stop or dance.
+                this.sendDanceState(this.showDanceNow); // Sends MQTT message about the dance state. If it's stop or dance.
             },
 
-        // Function to send MQTT message so that the wio terminal can change it's screen color accordingly and change state from dancing to standing still 
-        sendDanceState(showDanceNow) {
-            const moveState = showDanceNow ? this.executeDance : this.executeStill;
-            const client = mqtt.connect(HOST);
-            client.on("connect", () => {
-             client.publish("pll/game/dancestop/state", moveState.toString());
-            });
+            // Function to send MQTT message so that the wio terminal can change its screen color accordingly and change state from dancing to standing still 
+            sendDanceState(showDanceNow) {
+                // Determine the state to send
+                const moveState = showDanceNow ? this.executeDance : this.executeStill;
+                
+                // Connect to MQTT broker
+                const client = mqtt.connect(HOST);
+                
+                // When connected, publish the moveState
+                client.on("connect", () => {
+                    client.publish("pll/game/dancestop/state", moveState.toString());
+                });
+            },
         },
-    },
-    mounted() {
 
-            // When connection failed
+        mounted() { 
+            // When connection fails, log error
             client.on('error', (error) => {
-            console.error('Connection failed:', error);
-            client.end();
+                console.error('Connection failed:', error);
+                client.end();
             });
         },
-  };
-
-    } 
-
+    };
 </script>
 
 <style scoped src="../../assets/css/DanceStop.css"/>
