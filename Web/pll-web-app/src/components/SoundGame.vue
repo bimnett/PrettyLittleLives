@@ -7,7 +7,7 @@
       <audio :src="selectedSound" ref="audioPlayer"></audio>
     </div>
     <div class="images-grid">
-        <div class="image-box" v-for="(animal, index) in displayedAnimals" :key="animal.name" @click="checkAnswer(animal)">
+        <div class="image-box" v-for="(animal, index) in displayedAnimals" :key="animal.name" @click="checkAnswer(animal.name)">
           <img :src="animal.image" :alt="animal.name" class="animal-image">
           <div class="animal-name">{{ animal.name }}</div>
         </div>
@@ -58,12 +58,12 @@
       };
       
       const checkAnswer = (animal) => {
-        if (animal.name === selectedAnimal.value.name) {
-          alert("Correct!");
+        if (animal === selectedAnimal.value.name) {
           mqttClient.publish(mqttTopicCheckAnswer, "correct");
+          alert("Correct!");
         } else {
-          alert("Try again!");
           mqttClient.publish(mqttTopicCheckAnswer, "incorrect");
+          alert("Try again!");
         }
       };
 
