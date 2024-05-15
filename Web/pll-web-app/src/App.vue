@@ -19,64 +19,33 @@
 </template>
 
 <script>
+  import Temperature from './components/Temperature.vue'
+  import DecibelLevel from './components/DecibelLevel.vue'
+  import SensorDataHistory from './components/SensorDataHistory.vue';
+
+  export default {
+    name: "App",
+    
+    // connect the componens with the App.vue
+    components : {
+      Temperature : Temperature,
+      DecibelLevel : DecibelLevel,
+      SensorDataHistory: SensorDataHistory
+    },
+
+
+    data() {
+      return {
+        // Before any message is received, none as default. 
+        latestMessage: "None.",
+      };
+    },
+
+  };
+
+  
 
 </script>
 
-
-<style scooped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-.box_picture{
-  width: 60px;
-  height: 60px;
-}
-
-/* This style will apply to all <nav> tags */
-nav {
-  padding: 30px;
-  background-color: white;
-  position: fixed; /* Set the navbar to fixed position */
-  top: 0; /* Position the navbar at the top of the page */
-  width: 100%;
-  border-bottom: solid;
-}
-
-/* This style will apply to all <nav> tags and all other tags inside of this*/
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  padding:10px;
-  border-radius: 4px;
-  text-decoration: none; 
-}
-
-/* it applies to all <router-link> tags indide of a <nav> tag*/
-  /* extract-active will show to user on which option in menu bar that is active*/
-nav a.router-link-exact-active {
-  color: #4b5e70;
-  background: #FFDE59;
-  text-decoration: underline;
-}
-
-.spaceing{
-  margin:80px;
-  width:auto;
-}
-
-.corporation{
-  color: black;
-  bottom: 0px;
-  background-color: #FFDE59; 
-}
-
-
-
-
-
+<style>
 </style>
