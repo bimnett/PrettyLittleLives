@@ -12,10 +12,12 @@ const app = express();
 const port = process.env.PORT || 3000; // Default port is 3000
 
 // Declare global variables
-let client;
-let temperatureDb;
-let soundDb;
+let client; // MongoDB client instance to manage database connections
+let temperatureDb; // Database instance for 'temperature'
+let soundDb; // Database instance for 'sound'
 
+// Establishes a connection to MongoDB using the MongoDB client
+// It accesses two databases: 'temperature' and 'sound'
 async function connectToMongoDB() {
   client = new MongoClient(uri);
   try {

@@ -43,9 +43,6 @@ export default {
         console.error("Failed to save sound level:", error);
       }
     });
-    // test methods without connecting to mqtt
-    // await this.saveSoundLevel("999");
-    // console.log(`Sound Level saved to MongoDB`);
   },
   
   methods: {

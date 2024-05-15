@@ -39,9 +39,6 @@
           console.error('Failed to save temperature:', error);
         }
       });
-        // test methods without connecting to mqtt
-        // await this.saveTemperature("999");
-        // console.log(`Temperature saved to MongoDB`);
     },
   
     methods: {
