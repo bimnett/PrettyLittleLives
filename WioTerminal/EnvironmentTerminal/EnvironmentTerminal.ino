@@ -1,28 +1,26 @@
-#include <DHT.h>
-#include "rpcWiFi.h"
-#include "TFT_eSPI.h"
-#include <PubSubClient.h>
-#include "connectionCredentials.h"
-#include <Grove_LED_Bar.h>
-
-#include "MaryLamb.h"
-#include "WheelsOnTheBus.h"
+#include <DHT.h> // For temperature sensor
+#include "rpcWiFi.h" // For wifi
+#include "TFT_eSPI.h" // For Wio display
+#include <PubSubClient.h> // For the pub/sub MQTT
+#include <Grove_LED_Bar.h> // For the LED bar 
+//These header files was created by the team, where: 
+#include "connectionCredentials.h" // "connectionCredentials.h" --> credentials for the wifi and MQTT
+#include "MaryLamb.h" // "MaryLamb.h" --> calls a function from this header when db exceed certain threshold
+#include "WheelsOnTheBus.h" // "WheelsOnTheBus.h" --> calls a function from this header when db exceed certain threshold
 
 // Macro define
 #define BUZZER_PIN WIO_BUZZER 
 
-// Initialize TFT_eSPI object to manipulate screen.
-TFT_eSPI tft;
-
-// Initialize and declare necessary variables for local MQTT broker
+// Create necessary objects of the headers
 WiFiClient wifiClient;
 PubSubClient mqttClient;
+TFT_eSPI tft;
 
 // To be able to read the analog readings with the
-// temperature and humidity sensor throug the pin A0
+// temperature and humidity sensor through the pin A0
 // DHT11 is the sensor temperature and humidity sensor 
 DHT dht(D2, DHT11);   
-Grove_LED_Bar bar(D6, D8, 1);  // Clock pin, Data pin, Orientation
+Grove_LED_Bar bar(D8, D6, 1);  // Clock pin, Data pin, Orientation
 
 const int sampleWindow = 50; // Time frame where millis function will run. 
 unsigned int soundSample; // sound samples collected within the sampleWindow
@@ -95,7 +93,11 @@ void loop() {
   dtostrf(db,5, 1, db_char); 
 
   mqttClient.publish("pll/sensor/soundLevel", db_char);
-  Serial.println(db);
+  Serial.print(db);
+  Serial.println("db");
+  Serial.print(temperature);
+  Serial.print("temp");
+  Serial.println();
   delay(1000);
 
 }
@@ -182,4 +184,3 @@ void setLedbar(int soundLevel) {
         bar.setLevel(1); // lights up 1 light on the ledbar
     }
 }
-
