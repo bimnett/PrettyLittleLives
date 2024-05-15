@@ -1,19 +1,27 @@
 <template>
-    <div>
-        <h1> Lets play DanceStop </h1>
 
-    <!-- different content is shown on the webpage by clicking on button -->
+    <h2> <br>Let's play DanceStop </h2>
+    
+    <div class="space"></div>
+
+    <!-- different content is shown when clicking on button -->
     <div v-if="showDanceNow">
-        <h2>{{ dance }}</h2>
-       <img src="../../assets/dance.png" alt ="Dancing stick figure"> 
+        <h2>Dance!<br></h2> <br>
+       <img src="../../assets/images/dance.png" height="400" width="400"> 
     </div>
 
-    <div v-else> 
-        <h2>{{ standStill }}</h2>
-        <img src="../../assets/stop.png" alt ="Stop sign">
+    <div v-if="!showDanceNow"> 
+        <h2>Stand still</h2> <br>
+        <img src="../../assets/images/stop.png" height="400" width="400">
     </div>
 
 
+    <!-- when the buttom is clicked the method 
+        toggleStartDance & sendDanceState are executed -->
+    <button class="button" @click="[toggleStartDance(), sendDanceState(ShowDanceNow)]">
+        <!-- different names gets displayed on button -->
+        <span v-if="showDanceNow">Start dance</span>
+        <span v-if="!showDanceNow">Stop</span>
     <!-- when the buttom is clicked the method toggleStartDance is executed -->
     <button @click="toggleStartDance">
         <!-- different button-titles gets displayed on button -->
@@ -68,6 +76,8 @@
         },
   };
 
-  </script>
+    } 
 
-   
+</script>
+
+<style scoped src="../../assets/css/DanceStop.css"/>

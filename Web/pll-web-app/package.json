@@ -1,20 +1,26 @@
 {
   "name": "pll-web-app",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "dev": "vite",
-    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "core-js": "^3.8.3",
     "mqtt": "^5.5.5",
     "netlify-cli": "^17.23.2",
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.24.1",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
     "vite": "^5.2.8"
   }
 }
