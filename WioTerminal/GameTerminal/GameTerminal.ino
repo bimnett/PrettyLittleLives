@@ -12,10 +12,23 @@ LIS3DHTR <TwoWire> motion; // Uses the TwoWire interface
 // Declare necessary variables for MQTT broker
 WiFiClient wifiClient;
 PubSubClient mqttClient;
+
+
+
+// Variables that keep track if a game is currently active.
+// Will be checked in the loop function before doing any game logic.
+bool isDanceGameActive;
+bool isSoundGameActive;
 bool isDancing = false;
+
+
 
 void setup() {
   Serial.begin(115200);
+
+  // Initialize game states
+  isDanceGameActive = false;
+  isSoundGameActive = false;
 
   // Initializes the 5-way joystick on the terminal
   pinMode(WIO_5S_UP, INPUT_PULLUP);
@@ -60,9 +73,15 @@ void loop() {
   }
 
   // Track user input for the sound game
-  replaySound();
-  handleJoystickInput();
-  detectMotion(); 
+  if(isSoundGameActive) {
+    
+    replaySound();
+    handleJoystickInput();
+  }
+  
+  if(isDanceGameActive) {
+    detectMotion(); 
+  }
 }
 
 // Display text on the center of the screen.
@@ -116,22 +135,22 @@ void detectMotion() {
   float motionThreshold = 1.05; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
   
   if (isDancing) {
-    changeScreenColor(TFT_GREEN, "GO!"); // Change screen color to green and adds GO message on LCD screen 
+    shiftScreenColorAndText(TFT_GREEN, "GO!"); // Change screen color to green and adds GO message on LCD screen 
     if (totalAcceleration < motionThreshold) {
-      changeScreenColor(TFT_GREEN, "Keep on dancing!");
+      shiftScreenColorAndText(TFT_GREEN, "Keep on dancing!");
       playBuzzer();
     }
   } else {
-    changeScreenColor(TFT_RED, "STOP!"); // Change screen color to red and adds stop message on LCD screen 
+    shiftScreenColorAndText(TFT_RED, "STOP!"); // Change screen color to red and adds stop message on LCD screen 
     if (totalAcceleration > motionThreshold) {
-      changeScreenColor(TFT_RED, "Stop dancing!");
+      shiftScreenColorAndText(TFT_RED, "Stop dancing!");
       playBuzzer(); 
     }
     delay(100); 
   }
 }
 
-void changeScreenColor(uint16_t color, const char* text){
+void shiftScreenColorAndText(uint16_t color, const char* text){
   tft.fillScreen(color);
   // Display text on screen 
   tft.setTextSize(3);
@@ -147,44 +166,71 @@ void playBuzzer() {
   delay(1000); 
 }
 
+
+
 // Retrieves mqtt subscription message.
 // Is automatically called when a message is received.
-// Checks the topic to decide if it is's related to sound game or danceStop game 
+// The handling of the message and topic is delegated to a separate function.
 void callback(char* topic, byte* payload, unsigned int length) {
-  if ((strcmp(topic, "pll/game-terminal/sound-game/options") == 0 || strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0)) {
-    char message[length];
-    for (int i = 0; i < length; i++) {
-      message[i] = payload[i];
-    }
-    handleSubMessage(message, topic);
-  } else {
-    // Convert byte payload of the message to a character array.
-    int message = atoi((char*)payload);
-    // Check message content and change the state accordingly
-    if (message == 1) {
-      isDancing = true;
-    } else if (message == 0) {
-      isDancing = false;
-    }
+
+  // 
+  char message[length];
+
+  for (int i = 0; i < length; i++) {
+    message[i] = payload[i];
   }
+
+  handleSubMessage(message, topic);
 }
 
 // Handler that triggers different actions depending on topic and subscription message. 
 void handleSubMessage(char message[], const char* topic) {
+
+  isSoundGameActive = false;
+  isDanceGameActive = false;
+
   // Start new instance of the sound game
   if (strcmp(topic, "pll/game-terminal/sound-game/options") == 0) {
+
     // Set the different option values
     parseSoundGameOptions(message);
+
     // Start the game
+    isSoundGameActive = true;
     startSoundGame();
+
+    return;
   }
+
   // Display result of the user's answer for the sound game
   else if (strcmp(topic, "pll/game-terminal/sound-game/check-answer") == 0) {
+
+    isSoundGameActive = true;
+
     if (strcmp("correct", message) == 0) {
       displayCorrect();
     } else {
       displayIncorrect();
     }
+
+    return;
+  }
+
+  else if(strcmp(topic, "pll/game/dancestop/state") == 0) {
+
+    isDanceGameActive = true;
+
+    // Convert message to integer for dance state comparison.
+    int danceState = atoi((char*)message);
+
+    if(danceState == 1) {
+      isDancing = true;
+    }
+    else if(danceState == 0) {
+      isDancing = false;
+    }
+
+    return;
   }
 }
 
