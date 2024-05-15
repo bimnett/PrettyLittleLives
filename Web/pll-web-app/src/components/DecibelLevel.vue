@@ -1,4 +1,5 @@
 <template>
+    <h2>Decibel Level</h2>
   <div>Current decibel level: {{ soundLevel }} db</div>
 </template>
 
@@ -10,11 +11,11 @@ import { HOST } from "@/credentials";
 export default {
   name: "DecibelLevel",
 
-  data() {
-    return {
-      soundLevel: 'null',
-    };
-  },
+    data() {
+      return {
+        soundLevel: '-', 
+      };
+    },
 
   async mounted() {
     // Connect to MQTT broker
@@ -58,4 +59,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

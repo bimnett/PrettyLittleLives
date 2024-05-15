@@ -1,4 +1,5 @@
 <template>
+    <h2>Temperature</h2>
     <div>Current temperature : {{ temp }} celsius</div>
   </template>
   
@@ -13,7 +14,7 @@
   
     data() {
       return {
-        temp: "nothing",
+        temp: "-",
       };
     },
   
@@ -52,6 +53,6 @@
       }
     }
   };
-  </script>
-  
+  </script>  
+
   <style></style>
