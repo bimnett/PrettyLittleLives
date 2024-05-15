@@ -57,7 +57,7 @@ void setup() {
   // Checks if the built-in accelerometer sensor is initialised, if not prints an error message in terminal and alerts the player on LCD screen.
   if (!motion) { 
     Serial.println("Error"); 
-    changeScreenColor(TFT_YELLOW, "Dance Stop not available!");
+    shiftScreenColorAndText(TFT_YELLOW, "Dance Stop not available!");
     delay(1000); 
   }
   motion.setOutputDataRate(LIS3DHTR_DATARATE_25HZ); 
