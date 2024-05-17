@@ -4,7 +4,7 @@ import express from 'express'; // Node.js web app framework to set up server
 import { MongoClient } from 'mongodb';
 import cors from 'cors'; // Cross-Origin Resource Sharing
 import dotenv from 'dotenv';
-import { uri } from './src/credentials.js';
+import { uri } from './credentials.js';
 
 dotenv.config(); // Load environment variable (from .env to process.env)
 
