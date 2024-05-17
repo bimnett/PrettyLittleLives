@@ -13,10 +13,10 @@
   <div class="space"><br></div>
   <div class = 'container'>
     <div class="box_history">
-      <!-- insert the custom-made tag for tempHistory-->
+      <DecibelHistory/>
     </div>
     <div class="box_history">
-        <SensorDataHistory/>
+      <TemperatureHistory/>
     </div>
   </div>
   <div class="space"></div>
@@ -26,7 +26,8 @@
   /* importing the components to this view */
   import Temperature from '../components/Temperature.vue'
   import DecibelLevel from '../components/DecibelLevel.vue'
-  import SensorDataHistory from '../components/SensorDataHistory.vue'
+  import DecibelHistory from '../components/DecibelHistory.vue'
+  import TemperatureHistory from '../components/TemperatureHistory.vue'
 
   export default {
   /* name of the view is EnvironmentView */
@@ -37,7 +38,8 @@
   components: {
     Temperature, 
     DecibelLevel,
-    SensorDataHistory
+    DecibelHistory,
+    TemperatureHistory
   }
   }
 </script>
