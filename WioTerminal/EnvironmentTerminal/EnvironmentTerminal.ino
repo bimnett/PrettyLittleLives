@@ -3,22 +3,22 @@
 #include "TFT_eSPI.h" // For Wio display
 #include <PubSubClient.h> // For the pub/sub MQTT
 #include <Grove_LED_Bar.h> // For the LED bar 
-//These header files was created by the team, where: 
+//These header files below were created by the team, where: 
 #include "connectionCredentials.h" // "connectionCredentials.h" --> credentials for the wifi and MQTT
 #include "MaryLamb.h" // "MaryLamb.h" --> calls a function from this header when db exceed certain threshold
 #include "WheelsOnTheBus.h" // "WheelsOnTheBus.h" --> calls a function from this header when db exceed certain threshold
 
-// Macro define
-#define BUZZER_PIN WIO_BUZZER 
+// ----------------------------------------------------------------------- START OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION -----------------------------------------------------------------------------
 
-// Create necessary objects of the headers
+// Create necessary instances of the header files + for the buzzer
+#define BUZZER_PIN WIO_BUZZER 
 WiFiClient wifiClient;
 PubSubClient mqttClient;
 TFT_eSPI tft;
+MaryLamb mary(BUZZER_PIN);
+WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
 
-// To be able to read the analog readings with the
-// temperature and humidity sensor through the pin A0
-// DHT11 is the sensor temperature and humidity sensor 
+// Temp sensor and LED bar
 DHT dht(D2, DHT11);   
 Grove_LED_Bar bar(D8, D6, 1);  // Clock pin, Data pin, Orientation
 
@@ -29,21 +29,14 @@ float peakToPeak = 0;
 unsigned int signalMin = 0; 
 unsigned int signalMax = 1023; 
 
-// Lower and upper decibel bound for melody player
-const int lowerBound = 50;
-const int upperBound = 60;
-
 // Decibel thresholds for setLedbar function 
-const int lowThreshold = 30; 
-const int mediumLowThreshold = 50; 
-const int mediumHighThreshold = 70; 
-const int highThreshold = 75; 
+const int lowThreshold = 4; 
+const int mediumLowThreshold = 6; 
+const int mediumHighThreshold = 11; 
+const int highThreshold = 15; 
 
-// Instance of MaryLamb
-MaryLamb mary(BUZZER_PIN);
-//Instance of WheelsOTheBus
-WheelsOnTheBus WheelsOnTheBus(BUZZER_PIN);
 
+// ----------------------------------------------------------------------- END OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION -----------------------------------------------------------------------------
 
 void setup(){
   Serial.begin(9600);
@@ -51,14 +44,13 @@ void setup(){
   connectToWiFi();
   connectToMQTTBroker();
   dht.begin(); 
-  // Buzzer pin as output
   pinMode(BUZZER_PIN, OUTPUT); 
-  bar.begin(); // initialise ledbar 
+  bar.begin(); 
   
 }
 
 void loop() {
-  // Re-establish connection if any is lost
+  // Re-establish WIFI and MQTT connection if lost
   if(!WiFi.isConnected()) {
     connectToWiFi();
   }
@@ -66,49 +58,45 @@ void loop() {
     connectToMQTTBroker();
   }
 
-  //read the tempature 
+  // Read and convert temperature, to send it to the MQTT broker 
   float temperature = dht.readTemperature(); 
-
-  // convert temp to string so it can be sent to MQTT broker
-  char temp_char[5];
-  dtostrf(temperature,5, 1, temp_char);
+  char temp_char[4];
+  dtostrf(temperature,4, 1, temp_char);
   mqttClient.publish("pll/sensor/temp", temp_char);
 
   delay(1000);
 
-
-  soundSample = analogRead(0); // read analog input from the loudness sensor 
-
-  
-  // Mapping from anlog to decibel
+  // read analog input from the loudness sensor and convert it to percentage
+  soundSample = analogRead(0); 
   float db = map (soundSample, signalMin, signalMax, 0, 100); 
 
-  // Play "Mary Had a Little Lamb" if sensor value is between 50db and 60db.
-  // Play "The wheels on the bus go round and round" if it exceeds 60db.
-  
-  setLedbar(db); // Light upp the ledbar, according to the decibel value.
+/* Play "Mary Had a Little Lamb" if sensor value is between 11% and 15%.
+   Play "The wheels on the bus go round and round" if it exceeds 15%.
+   Light up the ledbar according to the corresponding db level
+*/
+  if(db >= mediumHighThreshold && db <= highThreshold) {
+    mary.playSong();
+  }else if(db > highThreshold){
+    WheelsOnTheBus.playSong();
+  }
+  setLedbar(db); 
 
-  // convert to char* to then send it to the mqtt broker
+  // convert to char to then send it to the mqtt broker
   char db_char[5];
   dtostrf(db,5, 1, db_char); 
-
   mqttClient.publish("pll/sensor/soundLevel", db_char);
-  Serial.print(db);
-  Serial.println("db");
-  Serial.print(temperature);
-  Serial.print("temp");
-  Serial.println();
+
   delay(1000);
 
 }
+
+// ----------------------------------------------------------------------- START OF SEPERATE METHODS -----------------------------------------------------------------------------
 
 
 void displayText(char* text) {
   tft.fillScreen(0x0000);
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
-
-
 
 void connectToWiFi() {
   // Attempt to connect to the WiFi network until a connection is established
@@ -149,7 +137,7 @@ void connectToMQTTBroker() {
 }
 
 
-// to be able to recive mqtt messages 
+// In order to receive mqtt messages 
 void callback(char* topic, byte* payload, unsigned int length) {
   char message[length];
   // transform the byte to a readable message 
@@ -168,7 +156,7 @@ void setTextSettings() {
   tft.setTextColor(TFT_YELLOW);
   tft.setTextDatum(MC_DATUM);
 }
-
+// Light up depending on the db percentage level
 void setLedbar(int soundLevel) {
     if (soundLevel <= lowThreshold) {
         bar.setLevel(3); // lights up 3 lights on the ledbar 
@@ -184,3 +172,5 @@ void setLedbar(int soundLevel) {
         bar.setLevel(1); // lights up 1 light on the ledbar
     }
 }
+
+// ----------------------------------------------------------------------- END OF SEPERATE METHODS -----------------------------------------------------------------------------
