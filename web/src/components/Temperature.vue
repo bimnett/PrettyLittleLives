@@ -31,24 +31,25 @@
       });
   
       client.on("message", async (topic, message) => {
-        this.temp = message.toString();
+        this.temp = message.toString().trim();
+        console.log("Received temperature:", this.temp);
   
         try {
           await this.saveTemperature(this.temp);
           console.log(`Temperature ${this.temp} saved to MongoDB`);
         } catch (error) {
-          console.error('Failed to save temperature:', error);
+          console.error('Failed to save temperature:44444444444444444', error);
         }
       });
     },
   
     methods: {
     // Function to send HTTP post request to express server "http://localhost:3000/api/saveTemperature"
-      async saveTemperature(tempValue) {
+      async saveTemperature(temperatureValue) {
         try {
-          await axios.post("http://localhost:3000/api/saveTemperature", { temperature: tempValue });
+          await axios.post('http://localhost:3000/api/saveTemperature', { temperatureValue: parseFloat(temperatureValue) })
         } catch (error) {
-          console.error("Failed to save temperature:", error);
+          console.error("Failed to save temperature:555555555555", error);
         }
       }
     }

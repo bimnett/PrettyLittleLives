@@ -36,24 +36,64 @@ connectToMongoDB();
 app.use(cors());
 app.use(express.json()); // Parse incoming JSON requests
 
+
+
+
+
+
+
+
+
+
+
 // At API endpoint, receive temp data and save it to 'temp_values' collection in MongoDB
 app.post('/api/saveTemperature', async (req, res) => {
-    try {
-      const { temperatureValue } = req.body;
-      const temperatureFloat = parseFloat(temperatureValue); // Convert temperature to float. Note: float and double same type in js
-      
-      if (isNaN(temperatureFloat)) {
-        // If temperatureFloat is not a valid number, return error
-        return res.status(400).json({ message: 'Invalid temperature value' });
-      }
+  try {
+    const { temperatureValue } = req.body; // Extract temperatureValue from request body
+    console.log('Received temperature at api endpoint:', temperatureValue);
+   //const temperatureFloat = parseFloat(temperatureValue); // Convert temperature to float
+
+    // if (isNaN(temperatureFloat)) {
+    //   // If temperatureFloat is not a valid number, return error
+    //   return res.status(400).json({ message: 'Invalid temperature value00000000' });
+    // }
+
+    const result = await temperatureDb.collection('temp_values').insertOne({ temperature: temperatureValue, timestamp: new Date() });
+    res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
+  } catch (err) {
+    console.error('Failed to save temperature:123123123123123123', err); // Log the error
+    res.status(500).json({ message: 'Failed to save temperature11111111111111111', error: err });
+  }
+});
+
   
-      const result = await temperatureDb.collection('temp_values').insertOne({ temperature: temperatureFloat, timestamp: new Date() });
-      res.status(200).json({ message: 'Temperature saved', id: result.insertedId });
-    } catch (err) {
-      res.status(500).json({ message: 'Failed to save temperature', error: err });
-    }
-  });
-  
+// At API endpoint, receive sound level data and save it to 'decibel_values' collection in MongoDB
+app.post('/api/saveSoundLevel', async (req, res) => {
+  try {
+    const { soundLevelValue } = req.body;
+    console.log('Received sound level:', soundLevelValue); // Log the received data
+    //const soundLevelFloat = parseFloat(soundLevelValue); // Convert sound level to float
+    
+    // if (isNaN(soundLevelFloat)) {
+    //   // If soundLevelFloat is not a valid number, return error
+    //   return res.status(400).json({ message: 'Invalid sound level value' });
+    // }
+
+    const result = await soundDb.collection('decibel_values').insertOne({ soundLevel: soundLevelValue, timestamp: new Date() });
+    res.status(200).json({ message: 'Sound level saved', id: result.insertedId });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to save sound level', error: err });
+  }
+});
+
+
+
+
+
+
+
+
+
 
 // At API endpoint, retrieve top 10 temperature readings for current day
 app.get('/api/topTemperatureReadings', async (req, res) => {
@@ -71,24 +111,6 @@ app.get('/api/topTemperatureReadings', async (req, res) => {
   }
 });
 
-// At API endpoint, receive sound level data and save it to 'decibel_values' collection in MongoDB
-app.post('/api/saveSoundLevel', async (req, res) => {
-    try {
-      const { soundLevelValue } = req.body;
-      const soundLevelFloat = parseFloat(soundLevelValue); // Convert sound level to float
-      
-      if (isNaN(soundLevelFloat)) {
-        // If soundLevelFloat is not a valid number, return error
-        return res.status(400).json({ message: 'Invalid sound level value' });
-      }
-  
-      const result = await soundDb.collection('decibel_values').insertOne({ soundLevelFloat, timestamp: new Date() });
-      res.status(200).json({ message: 'Sound level saved', id: result.insertedId });
-    } catch (err) {
-      res.status(500).json({ message: 'Failed to save sound level', error: err });
-    }
-  });
-
 // At API endpoint, retrieve top 10 sound level readings for current day
 app.get('/api/topSoundReadings', async (req, res) => {
   try {
@@ -104,6 +126,20 @@ app.get('/api/topSoundReadings', async (req, res) => {
     res.status(500).json({ message: 'Failed to retrieve top sound level readings', error: err });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Start server
 app.listen(port, () => {

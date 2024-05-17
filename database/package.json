@@ -1,7 +1,7 @@
 {
     "name": "pll-server",
     "version": "1.0.0",
-    "main": "databaseConnection.mjs",
+    "main": "databaseConnection.js",
     "type": "module",
     "scripts": {
         "start": "node databaseConnection.mjs"
