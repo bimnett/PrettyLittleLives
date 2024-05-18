@@ -8,7 +8,7 @@
 #include "MaryLamb.h" // "MaryLamb.h" --> calls a function from this header when db exceed certain threshold
 #include "WheelsOnTheBus.h" // "WheelsOnTheBus.h" --> calls a function from this header when db exceed certain threshold
 
-/*----------------------------------------------------- START OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
+/*-------------------------------- START OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
 
 // Create necessary instances of the header files + for the buzzer
 #define BUZZER_PIN WIO_BUZZER 
@@ -36,7 +36,7 @@ const int mediumHighThreshold = 11;
 const int highThreshold = 15; 
 
 
-/*-------------------------------------------------- END OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
+/*------------------------------------ END OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
 
 void setup(){
   Serial.begin(9600);
@@ -67,19 +67,21 @@ void loop() {
   delay(1000);
 
   // Read analog input from the loudness sensor and convert it to percentage
-  soundSample = analogRead(0); 
+  soundSample = analogRead(4); 
   float db = map (soundSample, signalMin, signalMax, 0, 100); 
 
-/* Play "Mary Had a Little Lamb" if sensor value is between 11% and 15%.
-   Play "The wheels on the bus go round and round" if it exceeds 15%.
-   Light up the ledbar according to the corresponding db % level
+/*
+  Light up the ledbar according to the corresponding db % level
+  Play "Mary Had a Little Lamb" if sensor value is between 11% and 15%.
+  Play "The wheels on the bus go round and round" if it exceeds 15%.  
 */
+  setLedbar(db);
   if(db >= mediumHighThreshold && db <= highThreshold) {
     mary.playSong();
   }else if(db > highThreshold){
     WheelsOnTheBus.playSong();
   }
-  setLedbar(db); 
+   
 
   // Convert to char to then send it to the mqtt broker
   char db_char[5];
@@ -90,7 +92,7 @@ void loop() {
 
 }
 
-/*----------------------------------------------------- START OF SEPERATE METHODS ------------------------------------------------------------*/
+/*------------------------------------ START OF SEPERATE METHODS ---------------------------------------------------------*/
 
 
 void displayText(char* text) {
@@ -173,4 +175,4 @@ void setLedbar(int soundLevel) {
     }
 }
 
-/*----------------------------------------------------- START OF SEPERATE METHODS ------------------------------------------------------------*/
+/*--------------------------------------- END OF SEPERATE METHODS ---------------------------------------------------*/
