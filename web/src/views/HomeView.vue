@@ -45,4 +45,37 @@
 </script>
 
 
-<style scoped src="../../assets/css/HomeView.css"/>
+<style scoped>
+  .picture_box{
+    width:auto;
+    height:250px;
+    background-color: #FFDE59;
+    position: center;
+  }
+
+  .container{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .box{
+    width: 500px;
+    height: 200px;
+    background-color: rgb(247, 247, 242);
+    border-radius: 20px;
+  }
+
+  .center{
+    display: flex;
+    justify-content: center;
+  }
+
+  .space{
+    margin:30px;
+    width:auto;
+  }
+
+  .bodytext{
+    text-align: 10px;
+  }
+</style>

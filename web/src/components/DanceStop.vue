@@ -17,7 +17,7 @@
 
     <!-- when the buttom is clicked the method 
         toggleStartDance & sendDanceState are executed -->
-    <button class="button" @click="toggleStartDance">
+    <button class="control-button" @click="toggleStartDance">
         <!-- different names gets displayed on button -->
         <span v-if="showDanceNow">Stop</span>
         <span v-else>Start dance</span>
@@ -79,4 +79,31 @@
     };
 </script>
 
-<style scoped src="../../assets/css/DanceStop.css"/>
+<style scoped>
+
+    .bodytext{
+        text-align: 10px;
+        font-family: 'Comic Sans MS';
+    }
+
+    .control-button {
+        background-color: #FFDE59;
+        border: none;
+        color: #2c3e50;
+        padding: 15px 32px;
+        text-align: center;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20px;
+    }
+
+    .control-button:hover{
+        background: #7D6608;
+    }
+    
+    .space{
+        margin:40px;
+        width:auto;
+    }
+</style>

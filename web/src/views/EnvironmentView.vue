@@ -44,5 +44,29 @@
   }
 </script>
 
-<style scoped src="../../assets/css/EnvironmentView.css"/>
+<style scoped>
+  .container{
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .box{
+    width: 500px;
+    height: 170px;
+    background-color: rgb(247, 247, 242);
+    border-radius: 20px;
+  }
+
+  .box_history{
+    width: 500px;
+    height: 700px;
+    background-color: rgb(247, 247, 242);
+    border-radius: 20px;  
+  }
+
+  .space{
+    margin:20px;
+    width:auto;
+  }
+</style>
   

@@ -1,9 +1,12 @@
 <template>
+  <div class="data-history">
     <h2>Temperature</h2>
     <div>Current temperature : {{ temp }} celsius</div>
-  </template>
+  </div>
+
+</template>
   
-  <script>
+<script>
   // Import the MQTT library and credentials for cluster
   import mqtt from "mqtt";
   import axios from "axios";
@@ -54,6 +57,6 @@
       }
     }
   };
-  </script>  
+</script>  
 
-  <style></style>
+<style scoped src="../../assets/css/displaySensorReadings.css"/>
