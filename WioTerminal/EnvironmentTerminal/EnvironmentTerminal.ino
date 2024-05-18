@@ -67,19 +67,21 @@ void loop() {
   delay(1000);
 
   // Read analog input from the loudness sensor and convert it to percentage
-  soundSample = analogRead(0); 
+  soundSample = analogRead(4); 
   float db = map (soundSample, signalMin, signalMax, 0, 100); 
 
-/* Play "Mary Had a Little Lamb" if sensor value is between 11% and 15%.
-   Play "The wheels on the bus go round and round" if it exceeds 15%.
-   Light up the ledbar according to the corresponding db % level
+/*
+  Light up the ledbar according to the corresponding db % level
+  Play "Mary Had a Little Lamb" if sensor value is between 11% and 15%.
+  Play "The wheels on the bus go round and round" if it exceeds 15%.  
 */
+  setLedbar(db);
   if(db >= mediumHighThreshold && db <= highThreshold) {
     mary.playSong();
   }else if(db > highThreshold){
     WheelsOnTheBus.playSong();
   }
-  setLedbar(db); 
+   
 
   // Convert to char to then send it to the mqtt broker
   char db_char[5];
