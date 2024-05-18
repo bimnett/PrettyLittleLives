@@ -1,7 +1,7 @@
 <template>
   <div class="data-history">
     <h2>Decibel Level</h2>
-    <div>Current decibel level: {{ soundLevel }} db</div>
+    <div>Current decibel level: {{ soundLevel }} % </div>
   </div>
 </template>
 

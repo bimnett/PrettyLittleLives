@@ -13,10 +13,10 @@
   <div class="space"><br></div>
   <div class = 'container'>
     <div class="box_history">
-      <DecibelHistory/>
+      <TemperatureHistory/>
     </div>
     <div class="box_history">
-      <TemperatureHistory/>
+      <DecibelHistory/>
     </div>
   </div>
   <div class="space"></div>
