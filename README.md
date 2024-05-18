@@ -41,7 +41,7 @@ Pretty Little Lives (PLL) is specifically designed with educators in mind, offer
 
 A higher resolution diagram can be found [here](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/System-Architecture)
 
-![diagram](https://cdn.discordapp.com/attachments/1043280587689037866/1237460216736514138/Architecture_diagram_-_Final_diagram.png?ex=663bba22&is=663a68a2&hm=c222bf2fc65d415f3a9f1a7971b88b51eb2990fa259fc537239bfb784359354a&)
+![diagram](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/uploads/fa2ec5bb6ae2bbe996293a3062fdc801/Architecture_diagram_-_Final_diagram__1_.png)
 
 The PLL system consists of several hardware components:
 - Sound level sensor
