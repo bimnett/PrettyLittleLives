@@ -76,6 +76,26 @@ To set up PLL for your kindergarten classroom:
 - [William Johansson](https://git.chalmers.se/willj)
 - [Ling Svahn](https://git.chalmers.se/lingsv)
 
+****Bimnet Tesfamariam****
+
+Bimnet contributed to the CI pipeline and helped set up the environment between the Wio Terminal, MQTT, and the website. He established the Wio Terminal connection and managed the Wio Terminal side for the "Guess the Sound" game and, connecting it to MQTT. In addition, he contributed to the README.
+
+****Sheenie Chan****
+
+Sheenie worked on the web side of the "Guess the Sound" game and contributed to establishing a connection to MQTT. She implemented the database connection to transfer reading data from the temperature and sound level sensors/MQTT to MongoDB and extracted these values from MongoDB to display past readings on the website. Sheenie also contributed to the README.
+
+****Fatma Ogoti Gichaba****
+
+Fatma worked on the "DanceStop" game. She managed the connection between the temperature and humidity sensor, the sound sensor, and MQTT to make sure the values are trasmitted and converted accurately. She also connected the LED lights from the LED bar, making more lights light up as the sound level increase.
+
+****William Johansson****
+
+William made the Wio Terminal play different melodies when the sound level reach certain thresholds. He refactored the entire project, helped set up the MongoDB database for temperature and sound level readings along with Ling, and helped in establishing the MQTT broker connection. William also contributed to the user manual and layed a key role in creating the system architecture along with Ling.
+
+****Ling Svahn****
+
+Ling designed the layout of the website and helped set up the MongoDB database for temperature and sound level readings. She also collaborated with William in establishing the MQTT broker connection and creating the system architecture. Ling also contributed to the user manual.
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
