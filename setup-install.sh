@@ -35,7 +35,7 @@ apt-get install nodejs -y
 
 
 # Install necessary node packages in web app directory
-cd /builds/courses/dit113/2024/group-15/pll/Web/pll-web-app/
+cd /builds/courses/dit113/2024/group-15/pll/web
 
 npm install mqtt
 
@@ -46,3 +46,13 @@ export PATH=$PATH:/root/bin
 npm install
 npm install --save-dev @babel/plugin-transform-private-methods
 npm install vue-router@4
+npm install axios 
+
+# Install necessary node packages in database directory
+cd ../database
+
+npm install
+npm install express
+nom install cors
+npm install dotenv 
+npm install mongodb

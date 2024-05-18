@@ -1,21 +1,23 @@
 <template>
+  <div class="data-history">
     <h2>Decibel Level</h2>
-  <div>Current decibel level: {{ soundLevel }} db</div>
+    <div>Current decibel level: {{ soundLevel }} % </div>
+  </div>
 </template>
 
 <script>
-import mqtt from "mqtt";
-import axios from "axios";
-import { HOST } from "@/credentials";
+  import mqtt from "mqtt";
+  import axios from "axios";
+  import { HOST } from "@/credentials";
 
-export default {
+  export default {
   name: "DecibelLevel",
 
-    data() {
-      return {
-        soundLevel: '-', 
-      };
-    },
+  data() {
+    return {
+      soundLevel: '-', 
+    };
+  },
 
   async mounted() {
     // Connect to MQTT broker
@@ -39,24 +41,24 @@ export default {
       try {
         // Save the sound level to MongoDB database
         await this.saveSoundLevel(this.soundLevel);
-        console.log(`Sound Level ${this.soundLevel} saved to MongoDB`);
+        console.log("Sound Level ${this.soundLevel} saved to MongoDB");
       } catch (error) {
         console.error("Failed to save sound level:", error);
       }
     });
   },
-  
+
   methods: {
     // Function to send HTTP post request to express server "http://localhost:3000/api/saveSoundLevel"
     async saveSoundLevel(soundLevelValue) {
       try {
-        await axios.post("http://localhost:3000/api/saveSoundLevel", { soundLevel: soundLevelValue });
+        await axios.post('http://localhost:3000/api/saveSoundLevel', { soundLevelValue: soundLevelValue })
       } catch (error) {
         console.error("Failed to save sound level:", error);
       }
     }
   }
-};
+  };
 </script>
 
-<style scoped></style>
+<style scoped src="../../assets/css/displaySensorReadings.css"/>

@@ -133,7 +133,7 @@ void detectMotion() {
   // Calculate total acceleration magnitude
   float totalAcceleration = sqrt((yValues * yValues) + (zValues * zValues) + (xValues * xValues)); 
 
-  float motionThreshold = 1.05; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
+  float motionThreshold = 1.25; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
   
   if (isDancing) {
     shiftScreenColorAndText(TFT_GREEN, "GO!"); // Change screen color to green and adds GO message on LCD screen 
