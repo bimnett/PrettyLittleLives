@@ -8,7 +8,7 @@
 #include "MaryLamb.h" // "MaryLamb.h" --> calls a function from this header when db exceed certain threshold
 #include "WheelsOnTheBus.h" // "WheelsOnTheBus.h" --> calls a function from this header when db exceed certain threshold
 
-/*----------------------------------------------------- START OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
+/*-------------------------------- START OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
 
 // Create necessary instances of the header files + for the buzzer
 #define BUZZER_PIN WIO_BUZZER 
@@ -36,7 +36,7 @@ const int mediumHighThreshold = 11;
 const int highThreshold = 15; 
 
 
-/*-------------------------------------------------- END OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
+/*------------------------------------ END OF VARIABLE/OBJECT DECLARATION AND INITIALIZATION ----------------------------------------*/ 
 
 void setup(){
   Serial.begin(9600);
@@ -92,7 +92,7 @@ void loop() {
 
 }
 
-/*----------------------------------------------------- START OF SEPERATE METHODS ------------------------------------------------------------*/
+/*------------------------------------ START OF SEPERATE METHODS ---------------------------------------------------------*/
 
 
 void displayText(char* text) {
@@ -175,4 +175,4 @@ void setLedbar(int soundLevel) {
     }
 }
 
-/*----------------------------------------------------- START OF SEPERATE METHODS ------------------------------------------------------------*/
+/*--------------------------------------- END OF SEPERATE METHODS ---------------------------------------------------*/
