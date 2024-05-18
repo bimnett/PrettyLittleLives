@@ -41,7 +41,7 @@
           await this.saveTemperature(this.temp);
           console.log(`Temperature ${this.temp} saved to MongoDB`);
         } catch (error) {
-          console.error('Failed to save temperature:44444444444444444', error);
+          console.error('Failed to save temperature: ', error);
         }
       });
     },
@@ -52,7 +52,7 @@
         try {
           await axios.post('http://localhost:3000/api/saveTemperature', { temperatureValue: parseFloat(temperatureValue) })
         } catch (error) {
-          console.error("Failed to save temperature:555555555555", error);
+          console.error("Failed to save temperature: ", error);
         }
       }
     }

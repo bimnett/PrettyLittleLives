@@ -32,26 +32,26 @@
 
       const audioPlayer = ref(null);
       var arrDisplayedAnimals = [];
-      const size = 4; // number of animals displayed
+      const size = 4; // Number of animals displayed
 
       function generateIndexArray(size) {
-          const uniqueIndexes = new Set(); // no repeats
+          const uniqueIndexes = new Set(); // No repeats
 
           while (uniqueIndexes.size < size) {
-              const randomNumber = Math.floor(Math.random() * 20); // number between 0-19
+              const randomNumber = Math.floor(Math.random() * 20); // Number between 0-19
               uniqueIndexes.add(randomNumber);
           }
           return Array.from(uniqueIndexes);
       }
-      const arrIndexDisplayedAnimals = generateIndexArray(size); // array of displayed animals
+      const arrIndexDisplayedAnimals = generateIndexArray(size); // Array of displayed animals
       for (var i = 0, t = size; i < t; i++) {
           arrDisplayedAnimals.push(animals[arrIndexDisplayedAnimals[i]])
       }
 
-      const selectedIndex = Math.floor(Math.random() * size); // 0-3 
+      const selectedIndex = Math.floor(Math.random() * size); // Indices 0-3 
       const selectedAnimal = ref(arrDisplayedAnimals[selectedIndex]);
       const selectedSound = ref(selectedAnimal.value.sound);
-      const displayedAnimals = ref(arrDisplayedAnimals); // 4 animals being displayed 
+      const displayedAnimals = ref(arrDisplayedAnimals); // Four animals being displayed 
 
       const playSound = () => {
         audioPlayer.value.play();
@@ -69,19 +69,19 @@
 
       const initialiseMQTT = () => {
         
-        // message published to mqtt
+        // Message published to mqtt
         const publishAnimalNames = () => {
-          const animalNames = arrDisplayedAnimals.map(animal => animal.name).join(',') + ','; // example: 'Monkey,Cow,Pig,Dog,''
+          const animalNames = arrDisplayedAnimals.map(animal => animal.name).join(',') + ','; // Example: 'Monkey,Cow,Pig,Dog,''
           mqttClient.publish(mqttTopicOptions, animalNames);
         };        
         
         mqttClient.on('connect', () => {
           console.log('Connected to MQTT broker');
           mqttClient.subscribe([mqttTopicReplay, mqttTopicAnswer]);
-          publishAnimalNames(); // publishes a string of animal names to the broker
+          publishAnimalNames(); // Publishes a string of animal names to the broker
         });
 
-        // messages subscribed to mqtt
+        // Messages subscribed to mqtt
         mqttClient.on('message', (mqttTopic, message) => {
           console.log(`Received message on ${mqttTopic}: ${message.toString()}`);
           if (mqttTopic === mqttTopicReplay && message.toString() === 'replay') {
@@ -89,7 +89,7 @@
             console.log(`Received message: ${message.toString()}`);
           } else if (mqttTopic === mqttTopicAnswer) {
             console.log(`Received message: ${message.toString()}`);
-            checkAnswer(message.toString()); // message is name of selected animal from wio terminal
+            checkAnswer(message.toString()); // Message is name of selected animal from wio terminal
           }
         });
 
@@ -133,8 +133,6 @@
     line-height: 1.8;
     margin: 0;
     color: #7D6608;
-    /* here change the style to pompire 
-    font-family:'Pompiere';   */
     text-align: center; 
   }
 
@@ -165,7 +163,7 @@
     grid-row-gap: 5px;
   }
 
-  /* component that contains both animal-image and animal-name */
+  /* Component that contains both animal-image and animal-name */
   .image-box {
     display: flex;
     flex-direction: column;
@@ -175,17 +173,17 @@
     cursor: pointer;
   }
 
-  /* image featuring the animal */
+  /* Image featuring the animal */
   .animal-image {
     width: 350px;
     height: 200px;
     margin: 1px;
     object-fit: cover;
     display: block;
-    overflow: hidden; /* hides parts of the animal image if it's over image-box's dimensions */
+    overflow: hidden; /* Hides parts of the animal image if it's over image-box's dimensions */
   }
 
-  /* text containing the animal name, shows below animal-image */
+  /* Text containing the animal name, shows below animal-image */
   .animal-name {
     font-size: 30px;
     color: black;

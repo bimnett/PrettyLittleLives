@@ -7,7 +7,7 @@
       <router-link :to="{ name : 'soundgame'}">SoundGame</router-link>
     </nav>
   </div>
-  <!-- to make the content visable from the menu bar-->
+  <!-- To make the content visable from the menu bar-->
   <div class="spaceing"></div>
 
   <router-view ></router-view>
@@ -50,8 +50,8 @@ nav a {
   text-decoration: none; 
 }
 
-/* it applies to all <router-link> tags indide of a <nav> tag*/
-  /* extract-active will show to user on which option in menu bar that is active*/
+/* It applies to all <router-link> tags indide of a <nav> tag,
+ extract-active will show to user on which option in menu bar that is active*/
 nav a.router-link-exact-active {
   color: #4b5e70;
   background: #FFDE59;

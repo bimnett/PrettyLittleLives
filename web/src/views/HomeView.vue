@@ -28,8 +28,6 @@
 </template>
   
 <script>
-  // @ is an alias to /src
-
   import InfoPLL from '@/components/InfoPLL.vue'
   import About from '@/components/About.vue'
   import Contact from '@/components/Contact.vue'

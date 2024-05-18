@@ -3,7 +3,7 @@
   <div class="space"><br></div>
   <div class = 'container'>
     <div class="box">
-      <!-- custom-made tag <Temperature/>, is self-closing -->
+      <!-- Custom-made tag <Temperature/>, is self-closing -->
       <Temperature/>
     </div>
     <div class="box">
@@ -23,17 +23,17 @@
 </template>
 
 <script>
-  /* importing the components to this view */
+  /* Importing the desired components to this view */
   import Temperature from '../components/Temperature.vue'
   import DecibelLevel from '../components/DecibelLevel.vue'
   import DecibelHistory from '../components/DecibelHistory.vue'
   import TemperatureHistory from '../components/TemperatureHistory.vue'
 
   export default {
-  /* name of the view is EnvironmentView */
+  /* Name of the view is EnvironmentView */
   name: 'EnvironmentView',
 
-  /* components that will be used as a custom-made tag
+  /* Components that will be used as a custom-made tag
   in the EnviromentView*/
   components: {
     Temperature, 
