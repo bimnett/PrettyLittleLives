@@ -9,4 +9,4 @@
     </div>
 </template>
 
-<style src="../../assets/css/style.css"/>
+<style src="../../assets/css/textFormat.css"/>
