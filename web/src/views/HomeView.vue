@@ -3,7 +3,7 @@
     <img alt="PLL logo" src="../../assets/images/pll.png" height="250" width="250">
   </div>
 
-  <h1>Welcome to Pretty Little Lives (PLL)</h1>
+  <h1 class="bodytext">Welcome to Pretty Little Lives (PLL)</h1>
 
   <div class="container">
     <div class="box">
@@ -46,6 +46,12 @@
 
 
 <style scoped>
+
+  .bodytext{
+    text-align: 10px;
+    font-family: 'Comic Sans MS';
+  }
+
   .picture_box{
     width:auto;
     height:250px;

@@ -11,7 +11,7 @@
     </div>
 
     <div v-else> 
-        <h2>{{ standStill }}</h2> <br>
+        <h2>{{ standStill }}<br></h2> 
         <img src="../../assets/images/stop.png" alt="Stop sign" height="400" width="400">
     </div>
 
@@ -96,12 +96,14 @@
         margin: 4px 2px;
         cursor: pointer;
         border-radius: 20px;
+        text-align: 10px;
+        font-family: 'Comic Sans MS';
     }
 
     .control-button:hover{
         background: #7D6608;
     }
-    
+
     .space{
         margin:40px;
         width:auto;

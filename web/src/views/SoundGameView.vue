@@ -1,5 +1,7 @@
 <template>
-    <SoundGame></SoundGame>
+    <div class="bodytext">
+        <SoundGame></SoundGame>
+    </div>
 </template>
 
 <script>
@@ -11,4 +13,4 @@ export default{
         SoundGame
     }
 }
-</script>
+</script><style src="../../assets/css/textFormat.css"/>

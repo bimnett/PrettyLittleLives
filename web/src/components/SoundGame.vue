@@ -148,6 +148,8 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 20px;
+    text-align: 10px;
+    font-family: 'Comic Sans MS';
     }
 
   .control-button:hover{

@@ -1,19 +1,21 @@
 <template>
-  <div class="menu">
-    <nav>
-      <router-link :to=" { name : 'home'}">Home</router-link> |
-      <router-link :to=" { name : 'environment'}">Environment readings</router-link> |
-      <router-link :to="{ name : 'dancestop'}">DanceStop</router-link> |
-      <router-link :to="{ name : 'soundgame'}">SoundGame</router-link>
-    </nav>
-  </div>
-  <!-- to make the content visable from the menu bar-->
-  <div class="spaceing"></div>
+  <div class ="bodytext">
+    <div class="menu">
+      <nav>
+        <router-link :to=" { name : 'home'}">Home</router-link> |
+        <router-link :to=" { name : 'environment'}">Environment readings</router-link> |
+        <router-link :to="{ name : 'dancestop'}">DanceStop</router-link> |
+        <router-link :to="{ name : 'soundgame'}">SoundGame</router-link>
+      </nav>
+    </div>
+    <!-- to make the content visable from the menu bar-->
+    <div class="spaceing"></div>
 
-  <router-view ></router-view>
+    <router-view ></router-view>
 
-  <div class="corporation">
-    <sub>© 2024 Pretty Little Lives, Inc.</sub>
+    <div class="corporation">
+      <sub>© 2024 Pretty Little Lives, Inc.</sub>
+    </div>
   </div>
 </template>
 
@@ -24,6 +26,11 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.bodytext{
+    text-align: 10px;
+    font-family: 'Comic Sans MS';
 }
 
 .box_picture{
