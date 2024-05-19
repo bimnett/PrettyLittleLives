@@ -1,5 +1,7 @@
 # Pretty Little Lives (PLL)
 
+![Logo](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/uploads/b312edb4cbc88e86fc050cfafa0a5341/PLLPic.png)
+
 ## Navigation Menu
 - [Product Description](#product-description)
 - [Purpose & Benefits](#purpose--benefits)
@@ -51,7 +53,10 @@ The PLL system consists of several hardware components:
 - Game Terminal for students.
 - Webpage for displaying real-time data and educational games.
 
-## Setup and Get Started (End User)
+## Get Started 
+
+[Product video](https://www.youtube.com/watch?v=sclOhW9BAPA&ab_channel=LingSvahn)
+
 To set up PLL for your kindergarten classroom:
 
 1. **Hardware Installation**:
@@ -78,7 +83,7 @@ To set up PLL for your kindergarten classroom:
 
 ****Bimnet Tesfamariam****
 
-Bimnet contributed to the CI pipeline and helped set up the environment between the Wio Terminal, MQTT, and the website. He established the Wio Terminal connection and managed the Wio Terminal side for the "Guess the Sound" game and, connecting it to MQTT. In addition, he contributed to the README.
+Bimnet contributed to the CI pipeline and helped set up the environment between the Wio Terminal, MQTT, and the website. He established the Wio Terminal connection and managed the Wio Terminal side for the "Guess the Sound" game and, connecting it to MQTT. In addition, he contributed to the README and he created the user manual.
 
 ****Sheenie Chan****
 
@@ -90,11 +95,11 @@ Fatma worked on the "DanceStop" game. She managed the connection between the tem
 
 ****William Johansson****
 
-William made the Wio Terminal play different melodies when the sound level reach certain thresholds. He refactored the entire project, helped set up the MongoDB database for temperature and sound level readings along with Ling, and helped in establishing the MQTT broker connection. William also contributed to the user manual and layed a key role in creating the system architecture along with Ling.
+William made the Wio Terminal play different melodies when the sound level reach certain thresholds. He refactored the entire project, helped set up the MongoDB database for temperature and sound level readings along with Ling, and helped in establishing the MQTT broker connection. William also layed a key role in creating the system architecture along with Ling.
 
 ****Ling Svahn****
 
-Ling designed the layout of the website and helped set up the MongoDB database for temperature and sound level readings. She also collaborated with William in establishing the MQTT broker connection and creating the system architecture. Ling also contributed to the user manual.
+Ling designed the layout of the website and helped set up the MongoDB database for temperature and sound level readings. She also collaborated with William in establishing the MQTT broker connection and creating the system architecture.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
