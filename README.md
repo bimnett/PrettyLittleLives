@@ -1,5 +1,7 @@
 # Pretty Little Lives (PLL)
 
+![Logo](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/uploads/b312edb4cbc88e86fc050cfafa0a5341/PLLPic.png)
+
 ## Navigation Menu
 - [Product Description](#product-description)
 - [Purpose & Benefits](#purpose--benefits)
@@ -39,9 +41,7 @@ Pretty Little Lives (PLL) is specifically designed with educators in mind, offer
 
 **System Architecture Diagram**
 
-A higher resolution diagram can be found [here](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/System-Architecture)
-
-![diagram](https://cdn.discordapp.com/attachments/1043280587689037866/1237460216736514138/Architecture_diagram_-_Final_diagram.png?ex=663bba22&is=663a68a2&hm=c222bf2fc65d415f3a9f1a7971b88b51eb2990fa259fc537239bfb784359354a&)
+![diagram](https://lucid.app/publicSegments/view/49cf8195-51f9-4595-9f43-1b0e0c4a7ee4/image.png)
 
 The PLL system consists of several hardware components:
 - Sound level sensor
@@ -51,7 +51,13 @@ The PLL system consists of several hardware components:
 - Game Terminal for students.
 - Webpage for displaying real-time data and educational games.
 
-## Setup and Get Started (End User)
+## Get Started 
+
+[Product video](https://www.youtube.com/watch?v=sclOhW9BAPA&ab_channel=LingSvahn)
+
+[![Alt text](https://img.youtube.com/vi/sclOhW9BAPA/0.jpg)](https://www.youtube.com/watch?v=sclOhW9BAPA)
+
+
 To set up PLL for your kindergarten classroom:
 
 1. **Hardware Installation**:
@@ -75,6 +81,26 @@ To set up PLL for your kindergarten classroom:
 - [Fatma Ogoti Gichaba](https://git.chalmers.se/ogoti)
 - [William Johansson](https://git.chalmers.se/willj)
 - [Ling Svahn](https://git.chalmers.se/lingsv)
+
+****Bimnet Tesfamariam****
+
+Bimnet contributed to the CI pipeline and helped set up the environment between the Wio Terminal, MQTT, and the website. He established the Wio Terminal connection and managed the Wio Terminal side for the "Guess the Sound" game and, connecting it to MQTT. In addition, he contributed to the README and he created the user manual.
+
+****Sheenie Chan****
+
+Sheenie worked on the web side of the "Guess the Sound" game and contributed to establishing a connection to MQTT. She implemented the database connection to transfer reading data from the temperature and sound level sensors/MQTT to MongoDB and extracted these values from MongoDB to display past readings on the website. Sheenie also contributed to the README.
+
+****Fatma Ogoti Gichaba****
+
+Fatma worked on the "DanceStop" game. She managed the connection between the temperature and humidity sensor, the sound sensor, and MQTT to make sure the values are trasmitted and converted accurately. She also connected the LED lights from the LED bar, making more lights light up as the sound level increase.
+
+****William Johansson****
+
+William made the Wio Terminal play different melodies when the sound level reach certain thresholds. He refactored the entire project, helped set up the MongoDB database for temperature and sound level readings along with Ling, and helped in establishing the MQTT broker connection. William also layed a key role in creating the system architecture along with Ling.
+
+****Ling Svahn****
+
+Ling designed the layout of the website and helped set up the MongoDB database for temperature and sound level readings. She also collaborated with William in establishing the MQTT broker connection and creating the system architecture.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
