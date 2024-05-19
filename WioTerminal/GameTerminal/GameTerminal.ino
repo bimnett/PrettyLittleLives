@@ -91,6 +91,8 @@ void displayText(char* text) {
   tft.drawString(text, tft.width() / 2, tft.height() / 2);
 }
 
+/* ________________________________ WIFI AND MQTT CONNECTION _______________________________________*/
+
 void connectToWiFi() {
   // Attempt to connect to the WiFi network until a connection is established
   while (!WiFi.isConnected()) {
@@ -125,6 +127,10 @@ void connectToMQTTBroker() {
   delay(1000);
 }
 
+/* ___________________________________ END WIFI AND MQTT CONNECTION ___________________________________*/
+
+/* --------------------------------------- DANCE_STOP GAME LOGIC --------------------------------------*/
+
 void detectMotion() {
   float xValues = motion.getAccelerationX(); // Retrieves the acceleration on the x-axis which is direction: Forward  
   float yValues = motion.getAccelerationY(); // Retrieves the acceleration on the y-axis which is direction: Sideways 
@@ -133,7 +139,7 @@ void detectMotion() {
   // Calculate total acceleration magnitude
   float totalAcceleration = sqrt((yValues * yValues) + (zValues * zValues) + (xValues * xValues)); 
 
-  float motionThreshold = 1.05; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
+  float motionThreshold = 1.25; // motionThreshold is the "limit" used to decide whether or not there is enough movement.
   
   if (isDancing) {
     shiftScreenColorAndText(TFT_GREEN, "GO!"); // Change screen color to green and adds GO message on LCD screen 
@@ -166,6 +172,8 @@ void playBuzzer() {
   analogWrite(WIO_BUZZER, 0); 
   delay(1000); 
 }
+
+/* ------------------------------ END DANCE_STOP GAME -------------------------------------------*/
 
 
 
@@ -298,7 +306,7 @@ void displayCorrect() {
 
   // Display green 'Correct!' text at the top
   tft.fillRect(0, 0, tft.width(), 50, TFT_BLACK);
-  setTextSettings(TFT_GREEN, 3);
+  setTextSettings(TFT_DARKGREEN, 3);
   tft.drawString("Correct!", tft.width() / 2, 25);
 }
 

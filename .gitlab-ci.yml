@@ -34,7 +34,7 @@ build-web-app:
 
     script:
         # Change directory to src folder of web app
-        - cd Web/pll-web-app/src
+        - cd web/src
 
         # Add mqtt credentials
         - echo "export const HOST = '$WEB_MQTT_HOST';" > credentials.js
@@ -49,7 +49,7 @@ build-web-app:
 
         # Save build directory artifact for web app deploy job
         paths: 
-            - Web/pll-web-app/dist
+            - web/dist
 
 
 # Deployment for web app
@@ -65,7 +65,7 @@ deploy-web-app:
         - echo "Deploying Project.."
         
         # Deploy build artifact to website production
-        - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir Web/pll-web-app/dist --prod 
+        - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir web/dist --prod 
 
     only:
         # Only deploy when the main branch is updated

@@ -1,8 +1,8 @@
 {
-  "name": "pll-web-app",
+  "name": "web",
   "version": "0.1.0",
   "private": true,
-  "main": "databaseConnection.js",
+  "main": "src/main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -11,10 +11,6 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "mongodb": "^6.6.1",
     "core-js": "^3.8.3",
     "mqtt": "^5.5.5",
     "netlify-cli": "^17.23.2",
