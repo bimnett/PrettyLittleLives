@@ -41,8 +41,6 @@ Pretty Little Lives (PLL) is specifically designed with educators in mind, offer
 
 **System Architecture Diagram**
 
-A higher resolution diagram can be found [here](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/System-Architecture)
-
 ![diagram](https://lucid.app/publicSegments/view/49cf8195-51f9-4595-9f43-1b0e0c4a7ee4/image.png)
 
 The PLL system consists of several hardware components:
@@ -56,6 +54,9 @@ The PLL system consists of several hardware components:
 ## Get Started 
 
 [Product video](https://www.youtube.com/watch?v=sclOhW9BAPA&ab_channel=LingSvahn)
+
+[![Alt text](https://img.youtube.com/vi/sclOhW9BAPA/0.jpg)](https://www.youtube.com/watch?v=sclOhW9BAPA)
+
 
 To set up PLL for your kindergarten classroom:
 
