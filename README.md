@@ -1,7 +1,5 @@
 # Pretty Little Lives (PLL)
 
-![Logo](https://git.chalmers.se/courses/dit113/2024/group-15/pll/-/wikis/uploads/b312edb4cbc88e86fc050cfafa0a5341/PLLPic.png)
-
 ## Navigation Menu
 - [Product Description](#product-description)
 - [Purpose & Benefits](#purpose--benefits)
